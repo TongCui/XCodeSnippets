@@ -1,0 +1,3 @@
+code:
+  sudo gem update --system 
+  sudo gem -n /usr/local/bin install cocoapods
