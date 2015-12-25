@@ -6,6 +6,8 @@ ssh-add <~/.ssh/rsa_..>
 ssh-add -D
 ssh-add -l
 
+//	Two SSH Keys
+
 #activehacker account
 Host github.com-activehacker
     HostName github.com
@@ -17,3 +19,10 @@ Host github.com-jexchan
     HostName github.com
     User git
     IdentityFile ~/.ssh/id_rsa_jexchan
+
+$ git config user.name "jexchan"
+$ git config user.email "jexchan@gmail.com" 
+
+[remote "origin"]
+        url = git@github.com-tong:TongCui/t_tools.git
+

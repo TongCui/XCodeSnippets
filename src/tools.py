@@ -35,6 +35,9 @@ class ShowFolder(object):
         print 'Files ' + ','.join(self.filenames)
         print '---------' 
 
+    def short_desc(self):
+        pass
+
     def __str__(self):
         descs = ['  ' * self.level + '- ' + filename for filename in self.filenames]
         for show_folder in self.show_folders:
@@ -44,6 +47,8 @@ class ShowFolder(object):
 
         return '\n'.join(descs)
 
+
+show_folder = None
 
 def get_doc_base_folder():
     return get_project_base_folder() + "/doc"
@@ -55,8 +60,10 @@ def get_all_show_options():
     docfolder = get_doc_base_folder()
 
 def tool_list():
-    show_folder = ShowFolder('doc', get_doc_base_folder())
     print show_folder
+
+def tool_list_short():
+    print show_folde
 
 def tool_show(path):
     lines = lines_of_file(path)
@@ -78,11 +85,13 @@ if __name__ == "__main__":
     
     print "This is a tools for some copy and paste code. Sorry, I am lazy..."
     tool_print_seperatorline()
+    show_folder = ShowFolder('doc', get_doc_base_folder())
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--verbose", help="output verbosity", action="store_true")
     parser.add_argument("-l", "--list", help="show all options", action="store_true")
-    parser.add_argument("-s", "--show", help="show option detail")
+    parser.add_argument("-s", "--short", help="show all options for short", action="store_true")
+    parser.add_argument("--show", help="show option detail")
     args = parser.parse_args()
 
     
@@ -94,7 +103,11 @@ if __name__ == "__main__":
         print("verbosity turned on")
 
     if args.list:
-        tool_list()
+        if args.short:
+            tool_list_short()
+        else:
+            tool_list()
+        
         tool_print_instruction("Done - Use --show next e.g. --show :how:pod:repair")
         tool_print_seperatorline()
 
