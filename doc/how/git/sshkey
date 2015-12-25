@@ -1,0 +1,3 @@
+ssh -T git@github.com
+ssh-add -l
+ssh-add <~/.ssh/rsa_..>

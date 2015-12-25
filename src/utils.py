@@ -7,6 +7,20 @@ import json
 import os.path
 import os
 
+###########################
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[37m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+###########################    
+
 debug = False
 
 def get_project_base_folder():
@@ -28,7 +42,7 @@ def datestr_from_timestamp(timestamp):
 def lines_of_file(file_path):
     if os.path.isfile(file_path):
         with open(file_path, 'r') as file:
-            lines = [line.strip() for line in file.readlines()]
+            lines = [line.rstrip() for line in file.readlines()]
         return lines
     else:
         return []
@@ -46,17 +60,31 @@ def write_line_into_file(line, file_path):
         file.write(line)
 
 
+###########################
+# Folder
+###########################
+
+def get_dirs_in_folder(folder_path):
+    return [f for f in os.listdir(folder_path) if os.path.isdir(folder_path + '/' + f)]
+
+def get_files_in_folder(folder_path):
+    return [f for f in os.listdir(folder_path) if os.path.isfile(folder_path + '/' + f) and not f.startswith('.')]
+
+
 if __name__ == "__main__":
     print get_project_base_folder()
 
-    print get_project_file_path('/file.log')
-    print get_project_file_path('/aaa/file.log')
+    print get_dirs_in_folder(get_project_base_folder() + "/doc")
+    print get_files_in_folder(get_project_base_folder() + "/doc/how/pod")
 
-    print "utils"
-    timestamp = timestamp_from_datestr('5/16/2014')
-    print timestamp
-    timestr = datestr_from_timestamp(timestamp)
-    print timestr
+    # print get_project_file_path('/file.log')
+    # print get_project_file_path('/aaa/file.log')
+
+    # print "utils"
+    # timestamp = timestamp_from_datestr('5/16/2014')
+    # print timestamp
+    # timestr = datestr_from_timestamp(timestamp)
+    # print timestr
 
 
 
