@@ -1,0 +1,98 @@
+// http://www.isaced.com/post-265.html
+Carthage 是由Swift语言写的， 只支持动态框架，ios8+
+
+========
+
+Carthage 的大致工作流程如下：
+
+- 创建一个 Cartfile 文件，写好你要哪些依赖库
+- 执行 carthage update 命令拉取源代码并编译为 Framework
+- 把编译后的 .framework 拖到项目中去即可 （官方是这么说的，不过更好的办法是把 Carthage 编译的 Framework 路径加入到 Build Setting 中的 Framework Search Path，详情见后文）
+
+========
+
+如果你想用测试版的 Xcode 进行编译，执行下面这条命令，把 xcode-select 的路径改为另一版本 Xcode 就可以了
+
+sudo xcode-select -s /Applications/Xcode-beta.app/Contents/Developer
+
+原来 Xcode -> Preferences -> Locations 中已经有切换 Command Line Tools 版本的选项...
+
+
+=======
+
+# 使用
+
+## 添加Cartfile 文件
+
+Cartfile
+
+# 必须最低 2.3.1 版本
+github "ReactiveCocoa/ReactiveCocoa" >= 2.3.1
+
+# 必须 1.x 版本
+github "Mantle/Mantle" ~> 1.0    # (大于或等于 1.0 ，小于 2.0)
+
+# 必须 0.4.1 版本
+github "jspahrsummers/libextobjc" == 0.4.1
+
+# 使用最新的版本
+github "jspahrsummers/xcconfigs"
+
+# 使用一个私有项目，在 "development" 分支
+git "https://enterprise.local/desktop/git-error-translations.git" "development"
+
+
+## 引入Framework
+
+
+在项目中引入依赖的 Framkework，只需要在对应 Target 中的 Build Setting 中的 Framework Search Path 项加入以下路径，Xcode 便会自动搜索目录下的 Framework：
+
+$(SRCROOT)/Carthage/Build/iOS
+
+
+========
+
+可用命令
+
+archive : Archives a built framework into a zip that Carthage can use
+bootstrap : Check out and build the project's dependencies
+build : Build the project's dependencies
+checkout : Check out the project's dependencies
+copy-frameworks : In a Run Script build phase, copies each framework specified by a SCRIPT_INPUT_FILE environment variable into the built app bundle
+fetch : Clones or fetches a Git repository ahead of time
+help : Display general or command-specific help
+update : Update and rebuild the project's dependencies
+version : Display the current version of Carthage
+
+
+
+// http://www.cocoachina.com/ios/20141204/10528.html
+
+升级框架
+如果你改动了你的Cartfile，或者你想升级到框架的最新版本（服从于你指定的需求版本），执行carthage update命令可以达到目的。
+
+让你的框架支持Carthage
+Carthage只正式支持动态框架，动态框架能够在任何版本的OS X上使用，但只能在iOS 8及以上版本使用。
+
+因为Carthage拥有非中心化的包列表，以及没有项目指定的编译设置，大多数框架应该能自动编译。
+
+分享你的Xcode schemes
+Carthage将只从你的.xcodeproj中标记为已分享的Xcode schemes来编译。如果你想检查编译是否成功，执行carthage build --no-skip-current命令，然后检查Carthage.build文件夹。
+
+如果当执行命令但有scheme没有被编译，打开Xcode并确定对应scheme被标记为“Shared”，以便Carthage能够发现它。
+
+解决编译失败
+如果你在执行carthage build --no-skip-current时编译失败，尝试执行xcodebuild -scheme SCHEME -workspace WORKSPACE build 或xcodebuild -scheme SCHEME -project PROJECT build（将其中的大写单词换成你项目的对应名称），然后观察是否有相同的失败发生，这应该能生成足够的失败信息来解决问题。
+
+稳定版发布的标签
+Carthage使用语义化标签来发布稳定版本。如1.2.0，如带有字母则是不受支持的版本（如1.2-alpha-1）.
+
+CarthageKit
+大多数carthage命令行工具的功能都封装在一个名为CarthageKit的框架中。
+
+如果你希望将Carthage作为另一个工具的一部分，或者希望扩展Carthage的功能，可以看看CarthageKit的源码，检查API是否符合你的需求。
+
+授权协议
+Carthage使用MIT开源协议授权发布。
+
+
