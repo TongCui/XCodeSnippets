@@ -1,0 +1,96 @@
+//  http://www.ruanyifeng.com/blog/2015/05/thunk.html
+
+参数的求值策略
+  - 传值调用  call by value
+  - 传名调用  call by name
+
+var x = 1;
+
+function f(m) {
+  return m * 2;
+}
+
+f(x + 5)
+
+//  传值调用
+f(x + 5)
+f(6)
+
+//  传名调用
+f(x + 5)
+
+(x + 5) * 2
+
+//  传值调用比较简单，但是对参数求值的时候，实际上还没用到这个参数，有可能造成性能损失。
+
+Thunk 函数的含义
+
+编译器的"传名调用"实现，往往是将参数放到一个临时函数之中，再将这个临时函数传入函数体。这个临时函数就叫做 Thunk 函数
+
+function f(m) {
+  return m * 2;
+}
+
+f(x + 5)
+
+// 等同于
+
+var thunk = function() {
+  return x + 5;
+};
+
+function f(thunk) {
+  return thunk() * 2
+}
+
+
+//  Swift - Thunk
+
+
+protocol GenericProtocol {
+    
+    typealias AbstractType
+    
+    func magic() -> AbstractType
+}
+
+
+//  Protocol 'GenericProtocol' can only be used as a generic constraint because it has Self or associated type requirements
+//  let list : [GenericProtocol] = []
+
+//  泛型化协议可以通过使用抽象数据类型成员来达成 （使用 typealias）
+//  而 类、结构体、方法 和函数 通过使用类型参数化 达成泛型
+
+struct GenericProtocolThunk<T>: GenericProtocol {
+    
+    // closure which will be used to implement `magic()` as declared in the protocol
+    private let _magic : () -> T
+    
+    // `T` is effectively a handle for `AbstractType` in the protocol
+    init<P : GenericProtocol where P.AbstractType == T>(_ dep : P) {
+        // requires Swift 2, otherwise create explicit closure
+        _magic = dep.magic
+    }
+    
+    func magic() -> T {
+        // any protocol methods are implemented by forwarding
+        return _magic()
+    }
+}
+
+
+struct StringMagic : GenericProtocol {
+    
+    typealias AbstractType = String
+    
+    func magic() -> String {
+        
+        return "Magic!"
+    }
+}
+
+// we can now create arrays of thunks if we specify the type param
+
+let magicians : [GenericProtocolThunk<String>] = [GenericProtocolThunk(StringMagic())]
+
+magicians.first?.magic()

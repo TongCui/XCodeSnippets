@@ -1,0 +1,141 @@
+// http://swift.gg/2015/12/24/friday-qa-2015-11-20-covariance-and-contravariance/
+
+Supertypes and subtypes  
+
+Convariance 协变
+Contravariance 逆变
+
+协变和逆变则能告诉我们什么时候使用子类型或超类型会优于原来使用的类型
+
+Liskov 原则：被用于指导何时该使用子类
+它指出任何子类的实例总是能够替代父类的实例
+
+Robustness 原则: 一个函数若是另外一个函数的子类型，那么它的参数是原函数参数的超类型，返回值是原函数返回值的子类型
+
+协变和逆变（Convariance and Contravariance）
+
+协变（Convariance）指可接受子类型。重写只读的属性是「协变的」。
+逆变（Contravariance）指可接受超类型。重写方法中的参数是「逆变的」。
+不变（Invariance）指既不接受子类型，又不接受超类型。Swift 中泛型是「不变的」。
+双向协变（Bivariate）指既接受子类型，又接受超类型。我想不到在 Objective-C 或 Swift 中的任何例子。
+
+/////////////////////////////
+
+class Thing {
+    
+}
+
+
+class Animal : Thing {
+
+    func voice() -> String {
+        return "o"
+    }
+}
+
+class Cat : Animal {
+    
+    override func voice() -> String {
+        return super.voice() + "ok"
+    }
+}
+
+func animalF() -> Animal {
+    return Animal()
+}
+
+func catF() -> Cat {
+    return Cat()
+}
+
+let returnsAnimal: () -> Animal = catF
+//let returnsCat: () -> Cat = animalF
+
+func catCatF(inCat: Cat) -> Cat {
+    return inCat
+}
+
+class Person : Thing {
+    func purchaseAnimal() -> Animal {
+        return Animal()
+    }
+    func pet(animal: Animal) {
+        print("pet")
+    }
+}
+
+class CrazyCatLady : Person {
+    
+    override func purchaseAnimal() -> Cat {
+        return Cat()
+    }
+    
+    override func pet(animal: Thing) {
+        print("crazycatlady")
+    }
+    
+}
+
+let cat = CrazyCatLady()
+
+cat.purchaseAnimal()
+
+let person = Person()
+
+person.purchaseAnimal()
+
+var var1 : Array<Cat> = [Cat()]
+var var2 : Array<Animal> = [Animal()]
+
+var2 = var1
+
+///////////////////////////
+
+Swift 中的泛型的确是「不变的（Invariance）」，但是 Swift 标准库中的 Collection 类型通常情况下是「协变的（Convariance）」。举个例子：
+import UIKit 
+
+class Thing<T> { // 亦可以使用结构体 struct 声明
+    var thing: T 
+    init(_ thing: T) { self.thing = thing } 
+} 
+var foo: Thing<UIView> = Thing(UIView()) 
+var bar: Thing<UIButton> = Thing(UIButton()) 
+foo = bar // 报错：error: cannot assign value of type 'Thing<UIButton>' to type 'Thing<UIView>' 
+
+// Array 则不会报错 
+
+var views: Array<UIView> = [UIView()] 
+var buttons: Array<UIButton> = [UIButton()] 
+views = buttons
+Swift 中的 Protocol 不支持这里的类型改变。如果某个协议是继承自另外一个协议而且尝试着「重写」父协议的方法，Swift 会把它当做是另外一个方法。举个例子：
+class Thing {} 
+class Animal: Thing {} 
+class Cat: Animal {} 
+
+protocol SuperP { 
+    func f(animal: Animal) -> Animal 
+} 
+
+protocol SubP1: SuperP { 
+    func f(thing: Thing) -> Cat 
+} 
+
+protocol SubP2: SuperP { 
+    func f(cat: Cat) -> Thing 
+} 
+
+class ImplementsSubP1: SubP1 { 
+    func f(thing: Thing) -> Cat { 
+        return Cat() 
+    } 
+} 
+
+class ImplementsSubP2: SubP2 { 
+    func f(cat: Cat) -> Thing { 
+        return Thing() 
+    } 
+} 
+// ImplementSubP1 和 ImplementSubP2 将不被认为遵循了 SuperP 的协议
+
+
+//////////////////////////////
