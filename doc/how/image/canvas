@@ -1,0 +1,29 @@
+//  Enlarge Canvas
+
+import PIL
+from PIL import Image
+src = Image.open("src.png")
+
+image = Image.new("RGBA", (100,100), (0,0,0,0))
+
+box = (margin, margin, margin+width, margin+height)
+
+image.paste(image, box)
+image.save("newimage.png")
+
+
+//  Trim Image
+
+color = (0,0,0,0)
+color = (255,255,255,255) // Trim white color if you want
+
+import PIL
+from PIL import Image
+from PIL import ImageChops
+
+image = Image.open("image.pne")
+bg = Image.new(image.mode, image.size, color)
+diff = ImageChops.diff(image, bg)
+bbox = diff.getbbox()
+
+image.chop(bbox)

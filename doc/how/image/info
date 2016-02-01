@@ -1,0 +1,6 @@
+//////////
+sips --getProperty all image.png
+/////////
+file image.png
+/////////
+PIL : image.mode, image.info
