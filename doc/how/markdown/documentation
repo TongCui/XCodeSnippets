@@ -1,0 +1,75 @@
+# Demo
+
+/**
+    Repeats a string `times` times.
+
+    - Parameter str:   The string to repeat.
+    - Parameter times: The number of times to repeat `str`.
+
+    - Throws: `MyError.InvalidTimes` if the `times` parameter 
+        is less than zero.
+
+    - Returns: A new string with `str` repeated `times` times.
+*/
+func repeatString(str: String, times: Int) throws -> String {
+    guard times >= 0 else { throw MyError.InvalidTimes }
+    return Repeat(count: 5, repeatedValue: "Hello").joinWithSeparator("")
+}
+
+# Parameters
+
+/// Returns the magnitude of a vector in three dimensions
+/// from the given components.
+///
+/// - Parameters:
+///     - x: The *x* component of the vector.
+///     - y: The *y* component of the vector.
+///     - z: The *z* component of the vector.
+func magnitude3D(x: Double, y: Double, z: Double) -> Double {
+    return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2))
+}
+
+# Description Fields
+
+- Algorithm/Safety Information: Precondition, Postcondition, Requires, Invariant, Complexity, Important, Warning
+- Metadata: Author, Authors, Copyright, Date, SeeAlso, Since, Version
+- General Notes & Exhortations: Attention, Bug, Experiment, Note, Remark, ToDo
+
+# Code block
+
+/**
+    The perimeter of the `Shape` instance.
+
+    Computation depends on the shape of the instance, and is
+    equivalent to: 
+
+    ```
+    // Circles:
+    let perimeter = circle.radius * 2 * CGFloat(M_PI)
+
+    // Other shapes:
+    let perimeter = shape.sides.map { $0.length }
+                               .reduce(0, combine: +)
+    ```
+*/
+var perimeter: CGFloat { get }
+
+
+
+# A Simple Demo Class
+
+pass
+
+# Pre-Processor Directive #pragma mark - 
+
+// MARK:
+
+// TODO:
+
+// FIXME:
+
+# Jazzy
+
+Jazzy is a terrific open-source command-line utility that transforms your project's documentation comments into a set of Apple-like HTML documentation.
+
+
