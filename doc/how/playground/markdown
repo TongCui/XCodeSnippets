@@ -3,3 +3,8 @@ Markdown syntax
 /*:
 ### Test
 */
+
+//: XXX
+
+//: [Next Topic](@next)
+
