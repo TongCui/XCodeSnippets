@@ -1,0 +1,16 @@
+AOP
+
+Aspects
+
+//  https://github.com/steipete/Aspects
+
+
+// Swift AOP
+http://www.jianshu.com/p/91e71d3ffd88?hmsr=toutiao.io&utm_medium=toutiao.io&utm_source=toutiao.io
+
+注意block的类型，UIView的方法中已经直接声明好参数和返回值。Aspects为了灵活则直接声明为了一个id对象。id对应为swift中的AnyObject对象。所以在swift中为了正常使用这个方法，需要将闭包转换为AnyObject。代码如下：
+
+        let wrappedBlock:@convention(block) ()->Void={
+            //你的代码
+        }
+        let wrappedObject: AnyObject = unsafeBitCast(wrappedBlock, AnyObject.self)
