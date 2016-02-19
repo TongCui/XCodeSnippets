@@ -1,0 +1,29 @@
+/**!
+
+# A tutorial about 'How to add Quick actions'  http://iostuts.io/2015/10/08/how-to-add-quick-actions/
+
+# Demo code : https://github.com/gontovnik/DGQuickActionsTutorial
+
+*/
+
+# Static ones
+
+All of them should be defined in info.plist file in a specific key
+-----UIApplicationShotcutItems---------
+
+1. UIApplicationShortcutItemType - a string which is sent to your application as a part of UIApplicationShortcutItem. It can be used in code to handle actions for different shortcut types;
+
+2. UIApplciationShortcutItemTitle - a title of your action which will be displayed on the quick action menu. If the title not fit on one line and you did not specify a subtitle, then it will go on two lines. Can be localised;
+
+Optional keys:
+
+1. UIApplicationShortcutItemSubtitle - an optional string which defines a subtitle of your action. It will be displayed under your title on the quick actions menu. Can be localised;
+
+2. UIApplicationShortcutItemIconType — an optional string which defines built-in icon type. A list of available types can be found here;
+
+3. UIApplicationShortcutItemIconFile — an optional string specifying an image from Assets Catalog or from the Bundle. More information on image sizes and design guidelines can be found here. If this key is specified, then the system ignores UIApplicationShortcutItemIconType;
+
+4. UIApplicationShortcutItemUserInfo — an optional dictionary of additional information which you may want to parse.
+
+
+
