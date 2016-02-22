@@ -1,0 +1,7 @@
+//  Apple's Account
+QCFHostResolver
+
+QCFHostResolver* resolver = [[QCFHostResolver alloc] initWithName:host];    
+resolver.delegate = self;   
+[resolver start];   
+[self.dnsResolvers addObject:resolver];
