@@ -18,6 +18,10 @@ How do I declare A Block in Objective-C?
 
   [someObject someMethodThatTakesABlock:^returnType(parameters) {...}];
 
+- As a typedef:
 
+  typedef returnType (^TypeName)(paramterTypes);
+  
+  TypeName blockname = ^returnType(parameters){...};
 
 
