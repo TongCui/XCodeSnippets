@@ -1,0 +1,190 @@
+//  http://hayageek.com/ios-keychain-tutorial/
+
+# What is Keychain?
+
+Keychain is en encrypted container where you can store secured information like passwords, certificates, identities, ...etc.
+
+In iOS, each Applciation has it's own keychain.
+
+To share the data between apps, they should have the same Acess Group in code signing entitilements.
+
+![Keychain Graph](http://cdn.hayageek.com/wp-content/uploads/2014/03/iOS-Keychain-Tutorial-911x1024.png)
+
+
+-----------------------------
+
+Most useful keychain API: (add Security.Framework)
+
+1. SecItemAdd - used to add an item to keychain
+
+2. SecItemUpdate - used to modify an existing keychain item
+
+3. SecItemCopyMatching - used find an item in keychain and get information
+
+4. SecItemDelete
+
+'''
+NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+[dict setObject:(__bridge id)kSecClassGenericPassword forKey:(__bridge id)kSecClass];
+ 
+NSData *encodedKey = [key dataUsingEncoding:NSUTF8StringEncoding];
+[dict setObject:encodedKey forKey:(__bridge id)kSecAttrGeneric];
+[dict setObject:encodedKey forKey:(__bridge id)kSecAttrAccount];
+[dict setObject:service forKey:(__bridge id)kSecAttrService];
+[dict setObject:(__bridge id)kSecAttrAccessibleAlwaysThisDeviceOnly forKey:(__bridge id)kSecAttrAccessible];
+ 
+//Optiona. This is for sharing data across apps
+[dict setObject:group forKey:(__bridge id)kSecAttrAccessGroup];
+
+
+'''
+
+
+kSecClass -> type of item which is kSecClassGenericPassword
+kSecAttrGeneric -> Generic attribute key.
+kSecAttrAccount -> Account attribute key
+kSecAttrService -> Name of the service.
+kSecAttrAccessible -> Specifies when data is accessible.
+kSecAttrAccessGroup -> Keychain access group name. This should be same to share the data across apps.
+
+
+
+----------------------------
+
+
+# How to enable sharing data across apps?
+
+Capabilities -> Keychain Sharing -> Keychain Group:(com.apps.shared)
+
+A XXX.entitlements file will be created then
+
+'''
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>keychain-access-groups</key>
+    <array>
+        <string>$(AppIdentifierPrefix)com.apps.shared</string>
+    </array>
+</dict>
+</plist>
+'''
+
+//////////////////////////////////////////
+//////////////////////////////////////////
+//////////////////////////////////////////
+
+Apple's WWDC Keychain and Authentication with Touch ID (2014)
+
+///http://devstreaming.apple.com/videos/wwdc/2014/711xx6j5wzufu78/711/711_keychain_and_authentication_with_touch_id.pdf
+
+
+Why the Keychain?
+
+1. Protected with the user passcode
+
+2. Protected with the device secret
+
+3. Protect secrets at rest
+
+4. Encripted backup
+
+5. Access control
+
+6. keychain sync
+
+
+Graph:
+
+Your Application        |   securityd     |     Secure enclave
+--------------------------------------------------------------
+Security.framework      |   Keychain      |     Device Secrets
+SecItem APIs            |                 |     Passode Secrets
+
+
+
+Access Control Roadmap
+
+
+            |     OS X     |   iOS              |      OS X
+                                             (kSecAttrSynchronizable)
+--------------------------------------------------------------
+Application |kSecAttrAccess|                    |  
+Entitlements|              |kSecAttrAccessGroup | kSecAttrAccessGroup
+When        |              |kSecAttrAccessible  | kSecAttrAccessible
+Authentication|            |kSecAttrAccessControl | kSecAttrAccessControl
+
+
+
+
+
+
+
+
+
+
+//////////////////////////
+
+Item Access Control Lists (ACLs)
+
+- Accessibility
+
+- Authentication
+
+* New API for ACLs
+
+(id)kSecAttrAccessControl
+
+
+--------------------------
+
+User Presence Authentication
+
+Policy
+
+Enforced by OS security domain
+
+Device configuration    |   Policy evaluation   |   Backup mechanism
+------------------------|-----------------------|----------------------
+Device without passcode |   No access           |   No Backup
+Device with passcode    |   Requires passcode   |   No Backup
+Device with Touch ID    |   Prefers Touch ID    |  Allows passcode
+
+
+
+Architecture
+
+User Space              |   Operating System    |   Secure Enclave
+------------------------|-----------------------|--------------------
+Application             |                       |   Touch ID
+Security.framework      |   LocalAuthentication | Credential Management
+SecItem APIs            |   Keychain            | Key Management
+
+
+Error handler:
+
+  if (success) {
+    NSLog(@"Authenticated using Touch ID.");
+  } else {
+    if (error.code == kLAErrorUserFallback) {
+      [self passcodeFallback];
+    } else if (error.code == kLAErrorUserCancel) {
+      [self cancelLogin];
+    } else {
+      [self reportError];
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
