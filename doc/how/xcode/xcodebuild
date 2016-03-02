@@ -1,0 +1,34 @@
+# iOS
+
+xcodebuild \
+  -workspace MyApp.xcworkspace \
+  -scheme MyApp \
+  -destination "platform=iOS,name=Gio's iPhone" \
+  clean test
+
+# iOS Simulator
+
+xcodebuild \
+  -workspace MyApp.xcworkspace \
+  -scheme MyApp \
+  -destination 'platform=iOS,id=YOUR_PHONE_UUID' \
+  clean test
+
+xcodebuild \
+  -workspace MyApp.xcworkspace \
+  -scheme MyApp \
+  -destination 'platform=iOS Simulator,name=iPhone 6,OS=9.1' \
+  clean test
+
+# watchOS and watchOS Simulator
+
+xcodebuild \
+  -workspace MyApp.xcworkspace \
+  -scheme MyWatchKitApp
+  -destination 'platform=iOS Simulator,name=iPhone 6,OS=9.1' \
+  build
+
+
+# List All Available Destinations
+
+instruments -s devices

@@ -1,0 +1,170 @@
+[Apple Automate UI Testing in iOS](https://developer.apple.com/library/tvos/documentation/DeveloperTools/Conceptual/InstrumentsUserGuide/UIAutomation.html)
+
+Script:
+
+"""
+
+  var target = UIATarget.localTarget();
+
+  var appName = target.frontMostApp().mainWindow().name;
+
+
+"""
+
+
+"""
+
+  //  List element hierachy for the Recipes screen
+
+  UIALogger.logStart("Logging element tree ...")
+
+  UIATarget.localTarget().logElementTree();
+
+  //some test code
+  
+  UIALogger.logMessage("Starting Module 001 branch 2, validating input.");
+
+  //capture a screenshot with a specified name
+
+  UIATarget.localTarget().captureScreenWithName("SS001-2_AddedIngredient");
+
+  //more test code
+
+
+  UIALogger.logPass();  
+
+
+"""
+
+
+UIATarget
+  - UIAApplication
+
+  - UIAWindow
+
+    - UIANavigationBar(Recipes)
+        
+        - UIAButton(Edit)
+
+        - UIAStatic Text (Recipes)
+
+        - UIAButton(Add)
+
+    - UIATableView
+
+        - UIATableCell
+        
+          - UIAElement
+ 
+        - UIATableCell
+
+        ......
+
+        - UIATableCell
+          
+          - UIAElement
+
+    - UIATabBar
+
+        - UIAButton (Recipes)
+
+        - UIAButton (Unit Conversion)
+
+
+## Perform User Interface Gestures
+
+"""
+
+  UIATarget.localTarget().fromMostApp().navigationBar().buttons()["Add"].tap();
+
+  UIATarget.localTarget().doubleTap({x:100, y:200})
+
+  UIATarget.localTarget().twoFingerTap({x:100, y:200})
+
+  //  Pinching
+
+  UIATarget.localTarget().pinchOpenFromToForDuration({x:20, y:200}, {x:300, y:200}, 2);
+
+  UIATarget.localTarget().pinchCloseFromToForDuration({x:20, y:200}, {x:300, y:200}, 2);
+
+  //  Dragging and flicking
+
+  UIATarget.localTarget().dragFromToForDuration({x:160, y:200}, {x:160, y:400}, 1);
+
+  UIATarget.localTarget().flickFromTo({x:160, y:200}, {x:160, y:400});
+
+  //  Entering text
+
+  var recipeName = "Unusually Long Name for a Recipe";
+
+  UIATarget.localTarget().frontMostApp().mainWindow().textFields()[0].setValue(recipeName);
+
+  //  Scrolling to an element
+
+  UIATarget.localTarget().frontMostApp().mainWindow().tableViews()[0] \
+    .scrollToElementWithPredicate("name beginswith 'Turtle Pie'");
+
+
+
+"""
+
+
+## Handle Alert
+
+
+#### Handle Externally Generated Alerts
+
+"""
+
+// The following code example illustrates a very simple alert case:
+
+UIATarget.onAlert = function onAlert(alert) {
+    var title = alert.name();
+    UIALogger.logWarning("Alert with title '" + title + "' encountered.");
+    // return false to use the default handler
+    return false;
+}
+
+"""
+
+#### Handle Internally Generated Alerts
+
+"""
+
+UIATarget.onAlert = function onAlert(alert) {
+    var title = alert.name();
+    UIALogger.logWarning("Alert with title '" + title + "' encountered.");
+    if (title == "The Alert We Expected") {
+        alert.buttons()["Continue"].tap();
+        return true;  //alert handled
+    }
+    // return false to use the default handler
+    return false;
+}
+
+
+"""
+
+## Multitasking
+
+"""
+Test for Multitasking
+
+UIATarget.localTarget().deactivateAppForDuration(10);
+
+"""
+
+## Execute an Automation Instrument Script from the Command Line
+
+instruments -w deviceID -t templateFilePath targetAppName
+
+deviceID : The 40-character device identifier, or the name of the device or simulator.
+
+targetAppName : The local name of the application. When targeting a device, omit the pathname and .app extension. When targeting a simulator, use the full pathname.
+
+
+
+
+
+
+
