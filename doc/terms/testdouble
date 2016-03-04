@@ -1,0 +1,53 @@
+[WikiPedia](https://en.wikipedia.org/wiki/Test_double)
+
+In automated unit testing, it may be necessary to use objects or procedures that look and behave like their release-intended counterparts, but are actually simplified versions that reduce the complexity and facilitate testing.
+
+A **test double** is a generic (meta) term used for these objects or procedures.
+
+--------
+
+Types of test doubles
+
+- Test stub
+  used for providing the tested code with "indirect input"
+
+- Mock object
+  used for verifying "indirect output" of the tested code, by first defining the expectations before the tested code is executed
+
+- Test syp
+  used for verifying "indirect output" of the tested code, by first defining the expectations before the tested code is executed
+
+- Fake object
+  used as a simpler implementation, e.g. using an in-memory database in the tests instead of doing real database access
+
+- Dummy object
+  used when a parameter is needed for the tested method but without actually needing to use the parameter
+
+Chinese
+
+全量测试又慢又难以定位错误, 其所需的测试环境的维护成本也很高. 解决方案就是化整为零分别测试. 然而引入新的问题: 测某个"部分"时所需的依赖如何满足. 解决方案是一组被称为"测试替身(Test Double)"的技术
+
+[xUnit Test Patterns 笔记](http://www.cnblogs.com/coderzh/archive/2010/01/31/xUnit-Test-Patterns6-Test-Double.html)
+
+Dummy Object
+Dummy Objects泛指在测试中必须传入的对象，而传入的这些对象实际上并不会产出任何作用，仅仅是为了能够调用被测对象而必须传入的一个东西。
+
+Test Stub
+测试桩是用来接受SUT内部的间接输入(indirect inputs)，并返回特定的值给SUT。可以理解Test Stub是在SUT内部打的一个桩，可以按照我们的要求返回特定的内容给SUT，Test Stub的交互完全在SUT内部，因此，它不会返回内容给测试案例，也不会对SUT内部的输入进行验证。
+
+Test Spy
+Test Spy像一个间谍，安插在了SUT内部，专门负责将SUT内部的间接输出(indirect outputs)传到外部。它的特点是将内部的间接输出返回给测试案例，由测试案例进行验证，Test Spy只负责获取内部情报，并把情报发出去，不负责验证情报的正确性。
+
+Mock Object
+Mock Object和Test Spy有类似的地方，它也是安插在SUT内部，获取到SUT内部的间接输出(indirect outputs)，不同的是，Mock Object还负责对情报(indirect outputs)进行验证，总部(外部的测试案例)信任Mock Object的验证结果。
+
+Fake Object
+经常，我们会把Fake Object和Test Stub搞混，因为它们都和外部没有交互，对内部的输入输出也不进行验证。不同的是，Fake Object并不关注SUT内部的间接输入(indirect inputs)或间接输出(indirect outputs)，它仅仅是用来替代一个实际的对象，并且拥有几乎和实际对象一样的功能，保证SUT能够正常工作。实际对象过分依赖外部环境，Fake Object可以减少这样的依赖。需要使用Fake Object通常符合以下情形：
+
+实际对象还未实现出来，先用一个简单的Fake Object代替它。
+实际对象执行需要太长的时间
+实际对象在实际环境下可能会有不稳定的情况。比如，网络发送数据包，不能保证每次都能成功发送。
+实际对象在实际系统环境下不可用，或者很难让它变得可用。比如，使用一个依赖实际数据库的数据库访问层对象，必须安装数据库，并且进行大量的配置，才能生效。
+一个使用Fake Object的例子是，将一个依赖实际数据库的数据库访问层对象替换成一个基于内存，使用Hash Table对数据进行管理的数据访问层对象，它具有和实际数据库访问层一样的接口实现。
+
+

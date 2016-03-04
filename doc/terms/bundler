@@ -1,0 +1,5 @@
+[Ruby for iOS Developers bundler](http://www.mokacoding.com/blog/ruby-for-ios-developers-bundler/)
+
+"like CocoaPods, but for Ruby"
+
+Bundler lets you specify your dependencies into a Gemfile, it installs or update them for you, and finally makes sure that the executables your are calling are actually the ones specified for the project.

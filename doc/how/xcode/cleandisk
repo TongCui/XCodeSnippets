@@ -1,0 +1,23 @@
+[How to clean disk for an iOS developer](http://blog.neverthesamecolor.net/how-to-recover-disk-space-from-xcode/)
+
+- Derived Data
+
+  ~/Library/Developer/Xcode/DerivedData/
+
+- iOS Device Support
+
+  ~/Library/Developer/Xcode/iOS DeviceSupport/
+
+- Archives
+
+  ~/Library/Developer/Xcode/Archives/
+
+- Simulators
+
+  iOS 8 simulators are stored under ~/Library/Developer/CoreSimulator/Devices
+
+  Simulator data prior to iOS 8 can be found at ~/Library/Application Support/iPhone Simulator/
+
+- Organizer
+
+  

