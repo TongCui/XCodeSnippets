@@ -1,0 +1,6 @@
+# Notification block & remove self when finished
+
+    __block __weak id<NSObject> observer = [[NSNotificationCenter defaultCenter] addObserverForName:AFNetworkingTaskDidCompleteNotification object:task queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification) {
+        //  Do Something
+        [[NSNotificationCenter defaultCenter] removeObserver:observer];
+    }];

@@ -1,0 +1,12 @@
+{
+    aps =     {
+        alert = "Hello, Tong";
+        badge = 1;
+        category = "INVITE_CATEGORY";
+        sound = "sosumi.aiff";
+    };
+    foo =     {
+        a = 1;
+        b = token;
+    };
+}
