@@ -1,0 +1,31 @@
+[How to Use Vectors in Xcode 7](https://icons8.com/2015/10/30/how-to-use-vectors-in-xcode-7/)
+
+## How Vectors Work in Xcode 7
+
+Instead of scaling vectors at run time, the Xcode system takes your PDF image and generates @1x PNG, @2x PNG, and @3x PNG assets at build time.
+
+When you run the app, iOS automatically picks the size of the icon depending on the device.
+
+## Why Vectors Work This Way in Xcode 7
+
+- Backwards compatible with previous iOS versions
+
+- No performance hits. By comparison, resizing vectors may be a computationally intensive task at run time
+
+## Why Use Vectors if We End up Having PNGs
+
+- To save time creating image assets (unless you have a tool that already does it for you)
+
+- Fewer files to maintain
+
+- Future proof support (e.g. if in iOS 15 Apple begins to require @4x assets)
+
+
+## Embedding Vectos in Xcode 7
+
+1. Generate PDFs With @1x Asset
+
+2. Drag into Xcode
+
+3. Set the Scale Factors to Single Vector
+
