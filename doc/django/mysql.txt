@@ -1,0 +1,16 @@
+# start
+mysql -h host -u user -p
+
+# select
+select VERSION(), PI(), CURRENT_DATE, USER();
+
+# Database
+show databases;
+use test;
+quit;
+
+# Grant
+
+GRANT ALL ON menagerie.* TO 'your_mysql_name'@'your_client_host';
+
+

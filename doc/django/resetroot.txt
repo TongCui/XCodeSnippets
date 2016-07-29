@@ -1,0 +1,17 @@
+sudo /usr/local/mysql/support-files/mysql.server start
+sudo /usr/local/mysql/support-files/mysql.server start --skip-grant-tables
+
+
+mysql
+
+FLUSH PRIVILIEGES;
+
+> 5.7.6
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'MyNewPassword';
+
+<= 5.7.5
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('MyNewPassword');
+
+sudo /usr/local/mysql/support-files/mysql.server stop
+sudo /usr/local/mysql/support-files/mysql.server start
+
