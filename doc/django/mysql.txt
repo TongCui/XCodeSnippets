@@ -13,4 +13,31 @@ quit;
 
 GRANT ALL ON menagerie.* TO 'your_mysql_name'@'your_client_host';
 
+# Create db
+CREATE DATABASE test;
+
+USE test;
+
+# start
+mysql -u root -p test
+
+# create table
+CREATE TABLE pet(name VARCHAR(20), owner VARCHAR(20), species VARCHAR(20), sex CHAR(1), birth DATE, death DATE);
+
+# describe
+desc pet;
+
+# insert
+insert into pet values('Puffball', 'Diane', 'bird', 'f', '1999-10-01', NULL);
+
+# select
+select owner from pet where owner!="";
+
+# update
+update pet set birth='1999-10-10' where name="bowser";
+
+# selection
+SELECT * FROM pet WHERE birth >= '1998-1-1';
+SELECT * FROM pet WHERE species = 'dog' AND sex = 'f';
+SELECT * FROM pet WHERE species = 'snake' OR species = 'bird';
 
