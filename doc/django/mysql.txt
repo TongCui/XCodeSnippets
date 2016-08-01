@@ -41,3 +41,201 @@ SELECT * FROM pet WHERE birth >= '1998-1-1';
 SELECT * FROM pet WHERE species = 'dog' AND sex = 'f';
 SELECT * FROM pet WHERE species = 'snake' OR species = 'bird';
 
+# desc
+mysql> desc pet;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| name    | varchar(20) | YES  |     | NULL    |       |
+| owner   | varchar(20) | YES  |     | NULL    |       |
+| species | varchar(20) | YES  |     | NULL    |       |
+| sex     | char(1)     | YES  |     | NULL    |       |
+| birth   | date        | YES  |     | NULL    |       |
+| death   | date        | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+
+# load data infile
+"pet.txt"
+Fluffy,Harold,cat,f,1993-02-04,\N
+Claws,Gwen,cat,m,1994-03-17,\N
+Buffy,Harold,dog,f,1989-05-13,\N
+Fang,Benny,dog,m,1990-08-27,\N
+Bowser,Diane,dog,m,1979-08-31,1995-07-29
+Chirpy,Gwen,bird,f,1998-09-11,\N
+Whistler,Gwen,bird,\N,1997-12-09,\N
+Slim,Benny,snake,m,1996-04-29,\N
+
+load data local infile 'pet.text' into table pet fields terminated by ',' escaped by '\\' lines terminated by '\n' (name, owner, species, sex, birth, death)
+
+\N means NULL
+
+
+# delete all
+delete from pet;
+
+# update
+update pet set birth = '1989-08-31' where name='Bowser';
+
+# selected columns
+select name, birth from pet;
+select distinct owner from pet;
+
+# Sorting
+select name, birth from pet order by birth;
+
+select name, birth from pet order by birth ASC(DESC);
+
+# date calculations
+timestampdiff()
+
+select name, birth, curdate(), timestampdiff(year, birth, currentdate()) as age from pet;
+
+# is not null
+
+select name, birth, death, timestampdiff(year, birth, death) as age from pet where death is not null order by age;
+
+# year() month() dayofmonth()
+select name, birth, year(birth), month(birth), dayofmonth(birth) from pet;
+
+# date_add
+select name, birth from pet where month(birth) = month(date_add(curdate(), interval 4 month));
+select name, birth from pet where month(birth) = month(date_add(curdate(), interval 1 month));
+
+
+# about null
+select 1 is null, 1 is not null
+
+# pattern matching
+select * from pet where name like 'b%'
+
+# to find names containing exactly five characters, use five instances of the '_' pattern character;
+
+# regexp not regexp like not like
+# case-insensitive
+
+select * from pet where name regexp '^.....&'
+select * from pet where name regexp '^.{5}&'
+
+
+# group
+select species, count(*) from pet group by species;
+
+
+# event
+Fluffy  1995-05-15  litter  4 kittens, 3 female, 1 male
+Buffy  1993-06-23  litter  5 puppies, 2 female, 3 male
+Buffy  1994-06-19  litter  3 puppies, 3 female
+Chirpy  1999-03-21  vet needed beak straightened
+Slim  1997-08-03  vet broken rib 
+Bowser  1991-10-12  kennel  \N  
+Fang  1991-10-12  kennel  \N  
+Fang  1998-08-28  birthday  Gave him a new chew toy 
+Claws  1998-03-17  birthday  Gave him a new flea collar
+Whistler  1998-12-09  birthday  First birthday
+
+
+# load another table
+load data local infile 'event.txt' into table event fields terminated by '  ';
+
+# two tables
+select pet.name, timestampdiff(year, birth, date) as age, remark from pet inner join event on pet.name = event.name where event.type = 'litter';
+
+# Getting information about database and tables
+
+select database();
+show tables;
+desc pet;
+
+# Using with batch mode
+mysql -h host -u root -p < batch-file | more
+mysql -h host -u root -p < batch-file > output.out
+
+# command
+mysql -h host -u root -p -e `sql` > output.out
+
+-t -v
+
+-t output format
+-v echo the statements
+
+# shop
+CREATE TABLE shop (
+    article INT(4) UNSIGNED ZEROFILL DEFAULT '0000' NOT NULL,
+    dealer  CHAR(20)                 DEFAULT ''     NOT NULL,
+    price   DOUBLE(16,2)             DEFAULT '0.00' NOT NULL,
+    PRIMARY KEY(article, dealer));
+INSERT INTO shop VALUES
+    (1,'A',3.45),(1,'B',3.99),(2,'A',10.99),(3,'B',1.45),
+    (3,'C',1.69),(3,'D',1.25),(4,'D',19.95);
+
+
+# max
+select max(article) as article from shop;
+
+# select as param
+select * from shop where price = (select max(price) from shop);
+
+# limit
+select * from shop order by price desc limit 2;
+
+# find the highest price per articel
+select article, max(price) as price from shop group by article;
+
+# local variable
+select @min:=min(price), @max:=max(price) from shop;
+select @min, @max;
+select * from shop where price = @min or price = @max;
+
+
+# foreign keys
+
+CREATE TABLE person (
+    id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name CHAR(60) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE shirt (
+    id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    style ENUM('t-shirt', 'polo', 'dress') NOT NULL,
+    color ENUM('red', 'blue', 'orange', 'white', 'black') NOT NULL,
+    owner SMALLINT UNSIGNED NOT NULL REFERENCES person(id),
+    PRIMARY KEY (id)
+);
+
+INSERT INTO person VALUES (NULL, 'Antonio Paz');
+
+SELECT @last := LAST_INSERT_ID();
+
+INSERT INTO shirt VALUES
+(NULL, 'polo', 'blue', @last),
+(NULL, 'dress', 'white', @last),
+(NULL, 't-shirt', 'blue', @last);
+
+INSERT INTO person VALUES (NULL, 'Lilliana Angelovska');
+
+SELECT @last := LAST_INSERT_ID();
+
+INSERT INTO shirt VALUES
+(NULL, 'dress', 'orange', @last),
+(NULL, 'polo', 'red', @last),
+(NULL, 'dress', 'blue', @last),
+(NULL, 't-shirt', 'white', @last);
+
+
+# join
+select s.* from person p inner join shirt s on s.owner = p.id where p.name like "%Lill%" and s.color != 'white';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
