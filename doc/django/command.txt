@@ -1,0 +1,4 @@
+python manage.py flush
+python manage.py dumpdata appname > appname.json
+python manage.py loaddata appname.json
+python manage.py dbshell
