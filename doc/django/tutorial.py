@@ -169,3 +169,122 @@ polls/static/polls/style.css
 {% load staticfiles %}
 <link rel='stylesheet' type='text/css' herf={% static 'polls/style.css' %}>
 
+
+# base html
+[DjangoGirls](http://tutorial.djangogirls.org/zh/template_extending/)
+
+{% block content %}
+{% endblock %}
+
+
+# post_list.html
+{% extends 'blog/base.html' %}
+{% extends 'blog/base.html' %}
+
+    {% block content %}
+        {% for post in posts %}
+            <div class="post">
+                <div class="date">
+                    {{ post.published_date }}
+                </div>
+                <h1><a href="">{{ post.title }}</a></h1>
+                <p>{{ post.text|linebreaksbr }}</p>
+            </div>
+        {% endfor %}
+    {% endblock content %}
+
+
+
+# static 
+
+./manage.py collectstatic
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+
+# forms
+
+/blog/forms.py
+
+from django import forms
+from .models import Post
+
+class PostForm(forms.ModelForm):
+  class Meta:
+    model = Post
+    fields = ('title', 'text',)
+
+# post_edit.html
+ {% extends 'blog/base.html' %}
+
+ {% block content %}
+ <h1>New post</h1>
+ <form method="POST" class="post-form">{% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="save btn btn-default">Save</button>
+</form>
+ {% endblock %}
+
+
+# post_new view
+
+from django.shortcuts import redirect
+from .forms import PostForm
+
+def post_new(request):
+  if request.method == 'POST':
+    form = PostForm(request.POST)
+    if form.is_valid():
+      post = form.save(commit=False)
+      post.author = request.user
+      post.published_date = timezone.now()
+      post.save()
+      return redirect('blog.views.post_detail',pk=post.pk)
+  else:
+    form = PostForm()
+  
+  return render(request, 'blog/post_edit.html', {'form':form})
+
+
+# edit post
+# post detail page
+<a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+
+
+# views
+def post_new(request):
+  almost the same with above
+
+form = PostForm(request.POST, instance = post)
+
+form = PostForm(instance = post)
+
+# security
+{% if user.is_authenticated  %}
+
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -227,7 +227,39 @@ INSERT INTO shirt VALUES
 select s.* from person p inner join shirt s on s.owner = p.id where p.name like "%Lill%" and s.color != 'white';
 
 
+# show create table
+show create table shirt;
+show create table shirt\G
 
+# Calculating visits per day
+
+CREATE TABLE t1 (year YEAR(4), month INT(2) UNSIGNED ZEROFILL,
+             day INT(2) UNSIGNED ZEROFILL);
+INSERT INTO t1 VALUES(2000,1,1),(2000,1,20),(2000,1,30),(2000,2,2),
+            (2000,2,23),(2000,2,23);
+
+# single days
+select year, month, count(distinct day) as days from t1 group by year, month;
+
+
+# animals
+
+CREATE TABLE animals (
+     id MEDIUMINT NOT NULL AUTO_INCREMENT,
+     name CHAR(30) NOT NULL,
+     PRIMARY KEY (id)
+);
+
+INSERT INTO animals (name) VALUES
+    ('dog'),('cat'),('penguin'),
+    ('lax'),('whale'),('ostrich');
+
+SELECT * FROM animals;
+
+
+# to start with an auto_increment value other than 1, set that value with create table or alter table like
+
+alter table tbl auto_increment=100;
 
 
 
