@@ -88,9 +88,9 @@ rails db:rollbac
 
  <% provide(:title, "Help") %>
 
-<head>
-     <title><%= yield(:title) %> | Ruby on Rails Tutorial Sample App</title>
-</head>
+  <head>
+       <title><%= yield(:title) %> | Ruby on Rails Tutorial Sample App</title>
+  </head>
 
 
 
