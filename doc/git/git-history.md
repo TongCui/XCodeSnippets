@@ -69,6 +69,10 @@ git bisect replay logfile
 git bisect run sh good-or-bad.sh
 
 
+# diff the only changed line
+git diff -U0
+
+
 
 
 
