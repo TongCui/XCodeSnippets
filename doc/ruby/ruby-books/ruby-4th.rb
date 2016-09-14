@@ -479,92 +479,362 @@ ary 可以是 [1,2,3] 也可以是 {0=>"1"}
 
 # 第九章 运算符
 
+var || "Ruby"
+
+var nil or false  # "Ruby"
+
+name = var || "Ruby"
+
+name = "Ruby"
+if var
+	name = var
+end
+
+item = nil
+if ary
+	item = ary[0]
+end
 
+item = ary && ary[0]
+
+## 范围运算符
+
+Range.new(1, 10)
+1..10
+
+在Range对象内部，可以使用succ方法根据起点值组个生成接下来的值
 
+val = "a"
+val.succ
+val.succ
 
+## 定义运算符
 
+绝大多数可以定义或者重定义
+但有一些不能  :: && || .. ... ?: not = and or
 
+class Point
+	attr_reader :x, :y
 
+	def initialize(x = 0, y = 0)
+		@x, @y = x, y
+	end
 
+	def +(other)
+		self.class.new(x+other.x, y + other.y)
+	end
+end
+
+## 一元运算符
+
+class Point
+	def +@
+		dup
+	end
+
+	def -@
+		self.class.new(-x,-y)
+	end
+
+	def ~@
+		self.class.new(-y, x)
+	end
+end
+
+
+## 下标方法
+
+class Point
+	def [](index)
+		case index
+		when 0
+			x
+		when 1
+			y
+		else
+			raise ArgumentError, "out of range `#{index}`"
+		end
+	end
+
+	def []=(index, val)
+		case index
+		when 0
+			self.x = val
+		when 1
+			self.y = val
+		else
+			raise ArgumentError, "Error"
+		end
+	end
+end
 
+# 第十章 错误处理和异常
+
+begin
+	a()
+	b()
+	c()
+rescue
+	# error
+ensure
+	# somthing
+end
+
+$! 最后发生的异常（异常对象）
+$@ 最后发生异常的位置信息
+
+异常对象的方法
+- class
+- message
+- backtrace ($@ = $!.backtrace)
 
+## Retry
 
+file = ARGV[0]
 
+begin
+	io = File.open(file)
+rescue
+	sleep 10
+	retry
+end
 
+data = io.read
+io.close
 
+## 如果指定了无论如何都打不开的文件，程序会陷入死循环
 
+n = Integer(val) rescure 0
+
+## 类定义过程中使用rescure ensure
+
+class Foo
+	xxx
+rescue => ex
+	handle ex
+ensure
+	xxx
+end
 
+## 异常类
+
+Exception
+	SystemExit
+	NoMemoryError
+	SignalException
+	ScriptError
+		LoadError
+		SyntaxError
+		NotImplementedError
+	StandardError
+		RuntimeError
+		SecurityError
+		NameError
+			NoMethodError
+		IOError
+			EOFError
+		SystemCallError
+			Errno::EPERM
+			Errno::ENOENT
+
+MyError = Class.new(StandardError)
+MyError1 = Class.new(MyError)
+MyError2 = Class.new(MyError)
+MyError3 = Class.new(MyError)
 
+## 主动抛出异常
 
+raise message # RuntimeError
+raise 异常类
+raise 异常类， message
 
+# 第11章 块
 
+array = ["ruby", "Perl", "PHP", "Python"]
+sorted = array.sort #["PHP", "Perl", "Python", "ruby"]
 
+sorted = array.sort {|a, b| a<=> b}
 
+sorted = array.sort_by {|a| a.length}
 
+ary = %w(
+Line a
+line b
+)
 
 
+from.upto(to)
+to.downto(from)
+from.step(to, step)
 
+def total(from, to)
+	result = 0
+	from.upto(to) do |num|
+		if block_given?
+			result += yield(num)
+		else
+			result += num
+		end
+	end
+	result
+end
 
+total(1,10)
+total(1,10) {|num| num ** 2}
 
 
+## 把块封装成对象
 
+Proc 对象 能让块作为对象在程序中使用的类
 
+hello = Proc.new do |name|
+	puts "#{name}"
+end
 
+hello.call "World"
 
+## 把block从一个方法传给另一个方法
+## 首先通过变量把block 作为Proc对象接受，然后再传给另一个方法
+## 在方法定义时， 如果末尾的参数使用&参数名 Ruby就会自动把调用方法时传来的block封装成Proc对象
 
+def total(from, to, &block)
+	result = 0
+	from.upto(to) do |num|
+		if block
+			result += block.call num
+		else
+			result += num
+		end
+	end
+	result
+end
 
+total(1,10)
+total(1,10) {|num| num ** 2}
 
+# 第12章 数值类
 
+Numeric   ->  	Integer			->		Fixnum
+														->		Bignum
+					->		Float
+					->		Retional
+					->		Complex
 
 
+2.3.0 :066 > a = Rational(2,5)
+ => (2/5) 
+2.3.0 :067 > b = Rational(1,3)
+ => (1/3) 
+2.3.0 :068 > c = a+b
+ => (11/15) 
+2.3.0 :069 > c.to_f
+=> 0.7333333333333333 
 
+## 除法
 
+5.div(2) # 2
+5.div(2.2) # 2
+-5.div(2) # -3
 
+5.quo(2) # (5/2)
 
+ans = x.divmod(y)
 
+a, b = 5.divmod 2 # 2,1
 
+## 随机数
+Random.rand
+Random.rand(100)
 
+r1 = Random.new(1)
 
+[r1.rand, r2.rand]
 
+## 近似值误差
 
+a = 0.1 + 0.2
+b = 0.3
+[a, b]
+a == b
 
+a = Rational(1, 10) + Rational(2, 10)
+b = Rational(3, 10)
+[a, b]
+a == b
 
+## Comparable
 
+< <= == >= > between?
 
+class Vector
+	include Comparable
 
+	attr_accessor :x, :y
 
+	def initialize(x, y)
+		@x, @y = x, y
+	end
 
+	def scalar
+		Math.sqrt(x**2 + y**2)
+	end
 
+	def <=> (other)
+		scalar <=> other.scalar
+	end
+end
 
+# 第13章 数组类
 
+## 创建数组
 
+Array.new
 
+Array.new(5) # [nil, nil, nil, nil, nil]
 
+Array.new(5, 0) # [0,0,0,0,0]
 
+## 使用%w 与 %i
 
+lang = %w(Ruby Perl Python Scheme Pike REBOL)	# [String]
+lang = %i(Ruby Perl Python Scheme Pike REBOL) # [Symbol]
 
+a = (1..10).to_s
+a.values_at(1,3,5)
 
+## Array 方法
 
+a.compact
+a.compact!
+a.delete(x)
+a.delete_at(x)
+a.delete_if{|item| ...}
+a.reject{|item|...}
+a.reject!{|item|...}
 
+a.collect{|item|...}	# map
+a.collect!{|item|...} # map
+a.fill(value)
+a.fill(value, begin)
+a.fill(value, begin, to)
+a.fill(value, n..m)
+a.flatten
+a.flatten!
+a.each
+a.each_with_index
 
+a = Array.new(3) do
+	[0,0,0]
+end
 
+a[0][1] = 2
 
+result = []
+ary1.zip(ary2, ary3) do |a, b,c|
+	result << a + b + c
+end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# 第14章 字符串类
 
 
 
