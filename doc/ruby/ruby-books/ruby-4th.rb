@@ -836,16 +836,191 @@ end
 
 # 第14章 字符串类
 
+%Q and %q
+
+desc = %Q(Ruby 字符串 “” ‘’)
+() {} || []
+
+## Here Document
+
+<<"结束标识符"
+xxx
+结束标识符
+
+## 结束标识符 一般用 EOF  EOB  end of file end of block
+
+2.3.0 :009 > str = <<-EOB
+2.3.0 :010"> hello
+2.3.0 :011"> lien1
+2.3.0 :012"> line2
+2.3.0 :013"> EOB
 
 
+## 使用 `命令`
+`ls -al`
+puts `cat /etc/hosts`
+
+String#index
+String#rindex
+String#chop
+String#chomp
+
+# 第15章 hash
+
+建议使用key type
+
+- String
+- Symbol
+- Numeric
+- Date
+
+Hash#store
+Hash#fetch
+Hash#key? key
+Hash#has_key? key
+Hash#include? key
+Hash#member? key
+Hash#value? value
+Hash#has_value? value
+Hash#delete key
+Hash#delete_if block
+Hash#reject! block
 
 
+## word_count.rb
+# 初始为0
+count = Hash.new(0)
+
+File.open(ARGV[0]) do |file|
+	file.each_line do |line|
+		words = line.split
+		words.each do |word|
+			count[word] += 1
+		end
+	end
+end
+
+count.sort {|a, b| a[1] <=> b[1] } .each do |key, value|
+	puts "#{key} : #{value}"
+end
+
+# 第16章，Regexp
+
+## 创建方法
+- //
+- Regexp.new("Ruby")
+- %r
+
+if regex =~ string
+	xxx
+else
+	xxx
+end
+
+^$   \A \z
+
+## 捕获
+
+/(.)(.)(.)/ =~ "abc"
+$1
+$2
+$2
 
 
+(?:) 过滤不需要的捕获
 
+/(.)(\d+)(.)/ =~ "123456"
+/(.)(?:\d+)(.)/ =~ "123456"
 
+/c./ =~ "abcdedf"
 
+$`
+$&
+$'
 
+String#sub (//, "xx")
+String#sub {|matched|xx}
+String#gsub (//, "xx")
+String#scan
+
+正则表达式中使用（）捕获的时候，返回数组
+
+"abababababa".scan(/(.)(a)/) do |matched|
+	p matched
+end
+
+"abababababa".scan(/(.)(a)/) do |a, b|
+	puts "#{a} - #{b}" 
+end
+
+# 第17章 IO
+
+$stdin $stdout $stderr
+
+# 第18章  File Dir
+
+File#rename
+
+FileUtils::cp
+
+Dir::open
+
+Dir.glob("*")
+Dir.glob(".*")
+Dir.glob(["*.html", "*.htm"])
+
+FileTest module
+
+FileTest::exist?
+FileTest::file?
+
+File::split
+File::join
+
+File::find(dir) {|path| xxx}
+File::prune
+
+require 'find'
+Ignores = [/^\./, /^CVS$/]
+def lisdir(top)
+	Find.find(top) do |path|
+		if FileTest.directory? path
+			dir, base = File.split path
+			Ignores.each do |reg|
+				if reg =~ base
+					Find.prune
+				end
+			end
+			puts path
+		end
+	end
+end
+
+# 第20章 Time Date
+
+t = Time.now
+t.ios8601 # "2016-09-15T09:49:14+08:00" 
+t.rfc2822 # "Thu, 15 Sep 2016 09:49:14 +0800" 
+t.utc
+t.localtime
+
+# 第21章 Proc
+
+Proc#call
+Proc[xx]
+
+Proc#call(args,...)
+Proc[args,...]
+Proc#yield(args,...)
+Proc#arity
+Proc#parameters
+:opt :req :rest :key :keyrest :block
+
+pro0 = Pro.new{nil}
+pro1 = Pro.new{|a| a}
+pro2 = lambda{|a, b| [a, b]}
+pro3 = lambda{|a, b=1, *c| [a, b, c]}
+pro3 = lambda{|a, &block| [a, b, c]}
 
 
 
