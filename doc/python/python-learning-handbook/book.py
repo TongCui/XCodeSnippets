@@ -80,3 +80,70 @@ pow(144, 0.5)
 # Fractions
 from fractions import fraction
 x = Franction(1,3)
+
+# sort
+a = [1,5,2,1,3]
+a.sort()
+a.sort(reverse = True)
+a = ["a", "c", "B"]
+sorted(a, key=str.lower, reverse = True)
+sorted([i.lower() for i in a], reverse = True)
+
+# equal or same
+a = [1,2,3]
+b = [1,2,3]
+
+a == b # True
+a is b # False
+
+# true or false
+'spam' # True
+'' # False
+[] # False
+{} # False
+1 # True
+0.0 # False
+None # False
+
+# python syntax
+1. 程序由模块组成
+2. 模块包含语句
+3. 语句包含表达式
+4. 表达式建立并处理对象
+
+# stdout
+import sys
+sys.stdout = open('log.txt', 'a')
+print("hello, world")
+sys.stdout.close()
+
+# list
+[x + y  for x in 'abc' for y in 'ABC']
+
+# file
+[line.upper() for line in open('test.txt')]
+list(map(str.upper, open('test.txt')))
+
+# some build in functions
+sum([1,2,3])
+any(['', 1, 2])
+all(['', 1, 2])
+max([1,2,3])
+min([1,2,3])
+a, *b = open('text.txt')
+{line for line in open('text.txt') if line[0] == 'p'}
+
+# intersect
+s1 = "SPAM"
+s2 = "SBAM"
+
+#intersect(s1, s2)
+[x for x in s1 if x in s2]
+
+
+
+
+
+
+
+
