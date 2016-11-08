@@ -137,9 +137,38 @@ a, *b = open('text.txt')
 s1 = "SPAM"
 s2 = "SBAM"
 
-#intersect(s1, s2)
+# intersect(s1, s2)
 [x for x in s1 if x in s2]
 
+
+# class
+
+class MyClass(MyBaseClass):
+  def __init__(self, value):
+    self.data = value
+
+  def __add__(self, value):
+    return MyClass(self.data + value)
+
+  def __str__(self):
+    return 'desc'
+
+# class
+class Test:pass
+
+Test.a = "a"
+Test.b = "b"
+
+mya = Test()
+dir(mya)
+mya.c = "c"
+dir(mya)
+
+# __main__
+
+if __name__ = "__main__":
+  print 'ok'
+  # self-test code goes here
 
 
 
