@@ -1,0 +1,214 @@
+[New Programming Jargon](https://blog.codinghorror.com/new-programming-jargon/)
+[Chinese](http://www.csdn.net/article/1970-01-01/2807831)
+
+1. Yoda Conditions
+
+```
+Using if(constant == variable) instead of if(variable == constant), like if(4 == foo). Because it's like saying "if blue is the sky" or "if tall is the man".
+
+使用if（常量==变量）代替if（变量==常量）就像if（4==foo）。因为这就相当于说：“蓝色是天空”或“如果高是男人”。
+```
+
+2. Pokémon Exception Handling
+
+```
+try {
+}
+catch (Exception ex) {
+// Gotcha!
+}
+```
+
+3. Egyptian Brackets
+
+```
+You know the style of brackets where the opening brace goes on the end of the current line, e.g. this?
+
+if (a == b) {
+printf("hello");
+}
+We used to refer to this style of brackets as "Egyptian brackets". Why? Compare the position of the brackets with the hands in the picture. (This style of brackets is used in Kernighan and Ritchie's book The C Programming Language, so it's known by many as K&R style.)
+```
+
+4. Smug Report
+
+```
+A bug submitted by a user who thinks he knows a lot more about the system's design than he really does. Filled with irrelevant technical details and one or more suggestions (always wrong) about what he thinks is causing the problem and how we should fix it.
+```
+
+5. A Duck
+
+```
+A feature added for no other reason than to draw management attention and be removed, thus avoiding unnecessary changes in other aspects of the product.
+```
+
+6. Refuctoring
+
+```
+The process of taking a well-designed piece of code and, through a series of small, reversible changes, making it completely unmaintainable by anyone except yourself.
+```
+
+7. Stringly Typed
+
+```
+A riff on strongly typed. Used to describe an implementation that needlessly relies on strings when programmer & refactor friendly options are available.
+
+For example:
+
+Method parameters that take strings when other more appropriate types should be used.
+On the occasion that a string is required in a method call (e.g. network service), the string is then passed and used throughout the rest of the call graph without first converting it to a more suitable internal representation (e.g. parse it and create an enum, then you have strong typing throughout the rest of your codebase).
+Message passing without using typed messages etc.
+Excessively stringly typed code is usually a pain to understand and detonates at runtime with errors that the compiler would normally find.
+```
+
+8. Heisenbug
+
+```
+A computer bug that disappears or alters its characteristics when an attempt is made to study it
+```
+
+9. Doctype Decoration
+
+```
+When web designers add a doctype declaration but don't bother to write valid markup.
+
+<!DOCTYPE html>
+<BLINK>Now on sale!</BLINK>
+```
+
+10. Jimmy
+
+```
+A generalized name for the clueless/new developer.
+```
+
+11. Higgs-Bugson
+
+```
+A hypothetical bug predicted to exist based on a small number of possibly related event log entries and vague anecdotal reports from users, but it is difficult (if not impossible) to reproduce on a dev machine because you don't really know if it's there, and if it is there what is causing it. (see Higgs-Boson)
+
+```
+
+12. Nopping
+
+```
+I'm writing a scifi novel from the POV of an AI, and their internal language has a lot of programming jargon in it. One of the more generalizable terms is "nopping", which comes from assembler NOP for no-operation. It's similar to 'nap', but doesn't imply sleep, just zoning out. "Stanislav sat watching the screensaver and nopped for a while."
+```
+
+13. Unicorny
+
+```
+An adjective to describe a feature that's so early in the planning stages that it might as well be imaginary. We cribbed this one from Yehuda Katz, who used it in his closing keynote at last year's Windy City Rails to describe some of Rails' upcoming features.
+```
+
+14. Baklava Code
+
+```
+Baklava is a delicious pastry made with many paper-thin layers of phyllo dough. While thin layers are fine for a pastry, thin software layers don’t add much value, especially when you have many such layers piled on each other. Each layer has to be pushed onto your mental stack as you dive into the code. Furthermore, the layers of phyllo dough are permeable, allowing the honey to soak through. But software abstractions are best when they don’t leak. When you pile layer on top of layer in software, the layers are bound to leak.
+```
+
+15. Hindenbug
+
+```
+A catastrophic data destroying bug. "Oh the humanity!"
+
+Also related to Counterbug (a bug you present when presented with a bug caused by the person presenting the bug) and Bloombug (a bug that accidentally generates money).
+```
+
+16. Fear Driven Development
+
+```
+When project management adds more pressure (fires someone, moves deadlines forward, subtracts resources from the project, etc).
+```
+
+17. Hydra Code
+
+```
+Code that cannot be fixed. Like the Hydra of legend, every new fix introduces two new bugs. It should be rewritten.
+```
+
+18. Common Law Feature
+
+```
+A bug in the application that has existed so long that it is now part of the expected functionality, and user support is required to actually fix it.
+```
+
+19. Loch Ness Monster Bug
+
+```
+I've started Loch Ness Monster bug for anything not reproducible / only sighted by one person. I'm hearing a lot of people in the office say it now. (Possible alternates: Bugfoot, Nessiebug.)
+```
+
+20. Ninja Comments
+
+```
+Also known as invisible comments, secret comments, or no comments.
+```
+
+21. Smurf Naming Convention
+
+```
+When almost every class has the same prefix. IE, when a user clicks on the button, a SmurfAccountView passes a SmurfAccountDTO to the SmurfAccountController. The SmurfID is used to fetch a SmurfOrderHistory which is passed to the SmurfHistoryMatch before forwarding to either SmurfHistoryReviewView or SmurfHistoryReportingView. If a SmurfErrorEvent occurs it is logged by SmurfErrorLogger to ${app}/smurf/log/smurf/smurflog.log
+```
+
+22. Protoduction
+
+```
+A prototype that ends up in production. Heard this from a tech at the Fermi lab. He said he didn't coin the term but had heard it used a number of times at Fermi.
+```
+
+23. Rubber Ducking
+
+
+```
+某些时刻，你必须要讨论一些问题。有时候在老板办公室进行谈话，我只会关心并讨论我自己的那部分话题。我读到有人在他们的显示器上面放一个塑料玩具鸭然后讨论的相关文章。所以rubberducking是用自己的方式去讨论问题。
+```
+
+24.Banana Banana Banana
+
+```
+/// <summary>
+/// banana banana banana
+/// </summary>
+public CustomerValidationResponse Validate()
+```
+
+25.Bicrement
+
+```
+Adding 2 to a variable.
+```
+
+26. Reality 101 Failure
+
+```
+The program (or more likely feature of a program) does exactly what was asked for but when it's deployed it turns out that the problem was misunderstood and it's basically useless.
+```
+
+27. Mad Girlfriend Bug
+
+```
+When you see something strange happening, but the software is telling you everything is fine.
+```
+
+28. Megamoth
+
+```
+MEGA MOnolithic meTHod代表。通常包含一个God Object对象，横跨两个屏幕高度。与2k LOC相比，Megamoths规模更大。当心MEGAMOTH。
+```
+
+29. Hooker Code
+
+```
+Code that is problematic and causes application instability (application "goes down" often). "Did the site go down again? Yeah, Jim must still have some hooker code in there."
+```
+
+30. Jenga Code
+
+```
+When the whole thing collapses after you alter a block of code.
+```
+
+
+
+
