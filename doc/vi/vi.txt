@@ -1,0 +1,134 @@
+A vim Tutorial and Primer [https://danielmiessler.com/study/vim/#gs.by7GA00]
+
+
+# VERBS
+
+- d: delete
+- c: change
+- y: yank(copy)
+- v: visually select
+
+# MODIFIERS
+
+- i: inside
+- a: around
+- NUM
+- t: stops before it
+- /: find a string
+
+# NOUNS
+
+- w: word
+- s: sentence
+- ): sentence
+- p: paragraph
+- }: paragraph
+- t: tag
+- b: block
+
+# Delete two words
+
+d2w
+
+# Change inside sentence
+
+cis
+
+# Yank inside paragraph
+
+yip
+
+# Jumping to certain characters
+
+f<
+
+t<
+
+# Moving within the line
+
+0: move to the beginning of the line
+
+$: move to the end of the line
+
+^: move to the first non-blank character in the line
+
+t": jump to right before the next quotes
+
+f": jump and land on the next quotes
+
+w: move forward one word
+
+b: move back one word
+
+e: move to the end of your word
+
+W: B:
+
+): move forword one sentence
+
+}: move forword one paragraph
+
+H: move to the top of the screen
+
+M: move to the middle of the screen
+
+L: move to the bottom of the sceen
+
+gg: go to the top of the file
+
+G: go to the bottom of the file
+
+^F : page down
+
+^B: page up
+
+^i: jum to your previouse navigation location
+
+^o: jump back to where you were
+
+NUMg: go num line
+
+# DELETING 
+
+x:
+X:
+dd:
+dt.:
+
+# REPEATING
+
+.
+
+d2w 
+5.
+
+# Switching lines of text
+ddp
+
+# Spelling
+set spell spelllang=en_us
+set nospell
+z=
+
+# Substitution
+
+:%s/foo/bar/g
+:s/foo/bar/g
+
+# Searching
+
+/keyword
+
+# Using visual mode
+
+## select indside of parenthesis
+vi(
+
+## select inside of brackets
+vi[
+
+# Using macros
+qa: start recording a macro named "a"
+q: stop
+@a: play back the macro
+
