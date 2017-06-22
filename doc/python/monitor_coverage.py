@@ -112,7 +112,7 @@ def slack_line_result(isNew, filename, threshold, rate_diff):
       return "%.0f%%\t%s"%(rate_diff * 100, filename)
     
 def send_slack_message(title, text, color):
-  SLACK_TOKEN='xoxb-115405728627-NJVsJjDhRua3jVxlOEUERx2I'
+  SLACK_TOKEN='xoxb-1xxxxx-Nxxxx'
   SLACK_API_URL='https://slack.com/api/chat.postMessage'
   CHANNEL_NAME='dev-mob-bj-ci'
 
