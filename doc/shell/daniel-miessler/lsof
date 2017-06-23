@@ -1,0 +1,30 @@
+lists open files
+
+-a    And
+-l    show the userID instead of the username in the output
+-h    get help
+-t    get process IDs only
+-U    get the UNIX socket address
+
+
+# SHOW ALL CONNECTIONS WITH -I
+
+```
+
+$ lsof -i
+$ lsof -i 6
+$ lsof -i TCP
+$ lsof -i :22
+$ lsof -i@172.16.12.5
+$ lsof -i@172.16.12.5:22
+$ lsof -i -sTCP:LISTEN
+$ lsof -i | grep -i LISTEN
+$ lsof -u tcui
+$ lsof -u ^tcui
+$ kill -9 `lsof -t -u daniel`
+$ lsof -p 10075
+$ lsof -t -c Mail
+$ lsof /var/log/messages/  # SHOW EVERYTHING INTERACTING WITH A GIVEN DIRECTORY
+$ lsof /home/daniel/firewall_whitelist.txt # SHOW EVERYTHING INTERACTING WITH A GIVEN FILE
+
+```

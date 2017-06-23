@@ -1,0 +1,15 @@
+[[:alnum:]]
+[[:alpha:]]
+[[:contrl:]]
+[[:digit:]]
+[[:lower:]]
+[[:print:]]
+[[:space:]]
+
+grep '[[:digit:]]' names.txt
+grep '^[[:digit:]]' names.txt
+grep -A 2 Three count.txt
+-B -C
+
+
+

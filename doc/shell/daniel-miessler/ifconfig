@@ -1,0 +1,6 @@
+ifconfig
+
+ifconfig | grep inet
+
+curl ipecho.net/plain ; echo
+curl whatismyip.org
