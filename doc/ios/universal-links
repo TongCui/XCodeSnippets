@@ -1,0 +1,94 @@
+https://www.youtube.com/apple-app-site-association
+
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "EQHXZ8M8AV.com.google.ios.youtube.dev",
+        "paths": [
+          "NOT /yt/*",
+          "NOT /account_monetization",
+          "NOT /artists",
+          "NOT /t/*",
+          "*"
+        ]
+      },
+      {
+        "appID": "4ANB9W7R3P.com.google.ios.youtube.enterprise",
+        "paths": [
+          "NOT /yt/*",
+          "NOT /account_monetization",
+          "NOT /artists",
+          "NOT /t/*",
+          "*"
+        ]
+      },
+      {
+        "appID": "EQHXZ8M8AV.com.google.ios.youtube",
+        "paths": [
+          "NOT /yt/*",
+          "NOT /activate",
+          "NOT /artists",
+          "NOT /t/*",
+          "*"
+        ]
+      }
+    ]
+  }
+}
+
+
+https://www.appannie.com/apple-app-site-association
+
+
+{
+  "applinks": {
+    "apps": [],
+    "details": {
+      "7JR7EMM59C.com.appannie.app.APIV1": {
+        "paths": [
+          "/??/insights/*"
+        ]
+      }
+    }
+  }
+}
+
+
+```objective-c
+
+#pragma mark - Application
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void(^)(NSArray * restorableObjects))restorationHandler {
+    
+    if (![DataCenter hasLoggedInUser]) {
+        return NO;
+    }
+    
+    if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
+        NSURL *url = userActivity.webpageURL;
+        
+        NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:YES];
+        
+        NSString *host = components.host;
+        NSArray *pathComponents = components.path.pathComponents;
+        
+        if ([host isEqualToString:kAppAnnieHost] && [pathComponents indexOfObject:kIsKindOfInsightsKeyword] == 2 ) {
+            if (pathComponents.count > 5) {
+                [self showInsightReport:[self reportWithPath:components.path]];
+            } else {
+                [self showInsightReportList];
+            }
+            
+            return YES;
+        } else {
+            return NO;
+        }
+        
+    } else {
+        return NO;
+    }
+}
+
+```
+
