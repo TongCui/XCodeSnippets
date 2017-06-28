@@ -1,3 +1,63 @@
 [Hand Off Apple Documentation](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/Handoff/HandoffFundamentals/HandoffFundamentals.html)
 
 
+## Introduced in iOS 8 and OS X v10.10
+
+
+
+## Handoff Interactions
+Handing off a user activity involves three phases:
+1. Create a user activity object for each activity the user engages in your app.
+2. Update
+3. Continue
+
+
+## Document-based app (that is, apps based on a subclass of NSDocument or UIDocument), provide built-in support
+
+Info.plist
+* NSUbiquitousDocumentUserActivityType
+The value of NSUbiquitousDocumentUserActivityType is a string that represents the NSUserActivity object’s activity type.
+
+<key>CFBundleDocumentTypes</key>
+<array>
+    <dict>
+        <key>CFBundleTypeName</key>
+        <string>NSRTFDPboardType</string>
+        . . .
+        <key>LSItemContentTypes</key>
+        <array>
+            <string>com.myCompany.rtfd</string>
+        </array>
+        . . .
+        <key>NSUbiquitousDocumentUserActivityType</key>
+        <string>com.myCompany.myEditor.editing</string>
+    </dict>
+</array>
+
+
+
+## Responder objects(subclasses of NSResponder and UIResponder)
+
+
+## Native App–to–Web Browser Handoff
+
+when the native app creates the NSUserActivity object, it sets the webpageURL property, and if the receiving device doesn't have an app that supports the user activity’s activityType, it can resume the activity in the default web-browser of the continuing platform.
+
+
+
+A web browser on OS X that wants to continue an activity in this way should claim the NSUserActivityTypeBrowsingWeb activity type (by entering that string in its NSUserActivityTypes array in the app's Info.plist property list file). This ensures that if the user selects that browser as their default browser, it receives the activity object instead of Safari.
+
+## Web Browser–to–Native App Handoff
+
+
+
+
+
+
+
+
+
+
+
+
+
