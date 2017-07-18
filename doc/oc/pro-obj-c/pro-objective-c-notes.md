@@ -1,4 +1,4 @@
-Safari Online books
+ Safari Online books
 
 ### Pro Objective-C
 
@@ -198,3 +198,60 @@ Each Class instance also includes a cache of pointers to recently used methods. 
 
 
 dyld is a system service that locates and loads dynamic libraries. It includes a shared cache that enables these libraries to be shared across processes.
+
+
+## Foundation Framework General Purpose Classes
+
+### Creation and Initialization
+
+The initialize class method is used to initialize a class after it is loaded but before it is first used—that is, before it or any class that inherits from it is sent its first message. 
+
+in fact, if the class is not used, the method is not invoked. The initialize method is thread-safe and always sent to all of a class’s superclasses before it is sent to the class itself.
+
+```
++ (void)initialize
+{
+  if (self == [MyClass class])
+  {
+    // Initilization logic
+  }
+}
+```
+
+The NSObject load class method, if implemented, is also invoked one time, after a class is loaded. It differs from the initialize method in several ways:
+
+- The load method is invoked very shortly after a class is loaded, prior to the initialize method. In fact, for classes that are statically linked (i.e., part of the program executable) the load method is called prior to the main() function. If the load method is implemented in a class packaged in a loadable bundle, it will be run when the bundle is dynamically loaded. Using the load method requires great care because it is called so early during application startup. Specifically, when this method is called, the program’s autorelease pool is (usually) not present, other classes may not have been loaded, and so forth.
+- The load method can be implemented for both classes and categories; in fact, every category of a class can implement its own load method. The initialize method should never be overriden in a category.
+- The load method is invoked one time, if implemented, after a class is loaded. The initialize method is invoked one time, if implemented, when a class receives its first message; if the class is not used, the method is not invoked.
+
+### Thread
+
+The detachNewThreadSelector:toTarget:withObject: method is functionally equivalent to the NSObject performSelectorInBackground:withObject: method. The NSThread initWithTarget:selector:object: method, by contrast, creates a new thread object but does not start it. 
+
+```
+ConcurrentProcessor *processor = [ConcurrentProcessor new];
+[NSThread detachNewThreadSelector:@selector(downloadTask)
+                         toTarget:processor
+                       withObject:nil];
+```
+
+```
+ConcurrentProcessor *processor = [ConcurrentProcessor new];
+NSThread *computeThread = [[NSThread alloc] initWithTarget:processor
+                                                  selector:@selector(computeTask:)
+                                                    object:nil];
+[computeThread setThreadPriority:0.5];
+[computeThread start];
+```
+
+### LLVM
+
+LLVM Project components
+![llvm-project-components](./llvm-project-components.jpg)
+
+- Clang compiler: Clang is a modern compiler for the C, Objective-C, and C++ programming languages. It is responsible for parsing, validating, and diagnosing errors in the input code, and then translating the parsed code into LLVM intermediate representation (IR). Like the LLVM project, Clang is itself divided into modular, reusable libraries that expose public APIs.
+- Optimizers: The LLVM optimizers perform code optimization, traversing some portion of code to either collect information or perform transformations. Their features include compile-time optimization, link-time optimization, and optimization across language boundaries.
+- Code generator: The LLVM target-independent code generator is a framework that provides a suite of reusable components for translating the LLVM internal representation to the machine code for a specified target—either in assembly form (suitable for a static compiler) or in binary machine code form (usable for a JIT compiler).
+- Disassembler: The disassembler takes an LLVM bitcode file and converts it into human-readable LLVM assembly language.
+- JIT: The LLVM Just-in-Time (JIT) compiler performs runtime translation of LLVM IR code into machine code. It also performs runtime optimization based on dynamic information.
+
