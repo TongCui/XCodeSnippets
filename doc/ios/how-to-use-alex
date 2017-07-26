@@ -1,0 +1,12 @@
+How to use Alex
+[Apple](https://support.apple.com/en-us/HT203077)
+
+You can choose Alex for VoiceOver and for Speak Screen and Speak Selection. Follow these steps.
+Use Alex for VoiceOver
+- Go to Settings > General > Accessibility > VoiceOver > Speech.
+- If you're using English on your device, choose Default Dialect > English (U.S.) > Alex.
+- If your device is using another language by default, you'll need to add English as a Rotor Language. To do this, follow these steps:
+- Go to Settings > General > Accessibility > VoiceOver > Speech > Add New Language.
+- Choose English (U.S).
+- Tap the More Info button next to English (U.S.) from the Rotor Languages list.
+- Select Alex.
