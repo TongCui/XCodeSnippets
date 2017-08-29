@@ -218,3 +218,74 @@ class GenericContainer<Item>: Container<Item> {
 class SpecificContainer: Container<Int> {
 }
 ```
+
+
+#### Apply
+Apply is a function that applies a function to a list of arguments.
+
+Swift does not provide any apply method on Arrays.
+
+out apply
+```
+func apply<T, V>(fn: [T] -> V, args: [T]) -> V {
+    return fn(args)
+}
+```
+
+Example
+
+```
+let numbers = [1, 3, 5]
+
+func incrementValues(a: [Int]) -> [Int] {
+    return a.map { $0 + 1 }
+}
+
+let applied = apply(fn: incrementValues, args: numbers)
+```
+
+
+#### partitioning
+```
+typealias Accumlator = (lPartition: [Int], rPartition: [Int])
+
+func partition(list: [Int], criteria: (Int) -> Bool) -> Accumlator {
+    return list.reduce((lPartition: [Int](), rPartition: [Int]())) {
+        (accumlator: Accumlator, pivot: Int) -> Accumlator in
+        if criteria(pivot) {
+            return (lPartition: accumlator.lPartition + [pivot],
+              rPartition: accumlator.rPartition)
+        } else {
+            return (rPartition: accumlator.rPartition + [pivot],
+              lPartition: accumlator.lPartition)
+        }
+    }
+}
+
+let numbersToPartition = [3, 4, 5, 6, 7, 8, 9]
+partition(list: numbersToPartition) { $0 % 2 == 0 }
+```
+
+Generic one
+
+```
+func genericPartition<T>(list: [T],
+                         criteria: (T) -> Bool) -> (lPartition: 
+[T], 
+                         rPartition: [T]) {
+    return list.reduce((lPartition: [T](), rPartition: [T]())) {
+        (accumlator: (lPartition: [T], rPartition: [T]), pivot: T) -> (
+          lPartition: [T], rPartition: [T]) in
+        if criteria(pivot) {
+            return (lPartition: accumlator.lPartition + [pivot],
+              rPartition: accumlator.rPartition)
+        } else {
+            return (rPartition: accumlator.rPartition + [pivot],
+              lPartition: accumlator.lPartition)
+        }
+    }
+}
+
+let doublesToPartition = [3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]
+print(genericPartition(list: doublesToPartition) { $0.truncatingRemainder(dividingBy: 2.0) == 0 }
+```
