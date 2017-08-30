@@ -76,7 +76,7 @@ end
 puts ">>> Generate content"
 
 content = []
-# content.push "<h4>#{day}</h4>"
+content.push "<h4>#{day}</h4>"
 content.push "<table class=\"table\">"
 content.push "<tbody>"
 words.chars.each_with_index do |word, idx|

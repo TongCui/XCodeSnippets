@@ -218,3 +218,12 @@ class GenericContainer<Item>: Container<Item> {
 class SpecificContainer: Container<Int> {
 }
 ```
+
+#### map
+
+```
+let twoDimensionalArray = [[1, 3, 5], [2, 4, 6]]
+let oneDimensionalArray = twoDimensionalArray.flatMap { $0 }
+
+let oneDimensionalArray = twoDimensionalArray.joined().map { $0 }
+```

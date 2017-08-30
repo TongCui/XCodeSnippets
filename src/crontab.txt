@@ -1,0 +1,2 @@
+# China Stock Reminder
+20 15 * * 1-5 cd /Users/tcui/Documents/APPs/Tong/t_tools/src/china-a-stock-index/;ruby stock-monitor.rb > log.log
