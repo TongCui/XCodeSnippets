@@ -77,7 +77,7 @@ puts ">>> Generate content"
 
 content = []
 content.push "<h4>#{day}</h4>"
-content.push "<table class=\"table\">"
+content.push "<table class=\"table table-bordered text-center\">"
 content.push "<tbody>"
 words.chars.each_with_index do |word, idx|
   content.push "<tr class=\"#{kRowColors[idx % kRowColors.size]}\">"
