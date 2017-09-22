@@ -13,7 +13,7 @@ numbers_file_path = File.join(numbers_folder_path, "number-#{day}.json")
 html_file_path = File.join(htmls_folder_path, "number-#{day}.html")
 template_file_path = File.join(htmls_folder_path, "template.html")
 
-words = ["上证指数","创业板指数"]
+words = ["上证指数","创业板指数","长城汽车股票"]
 res = []
 content = ["<h1>#{day}<h1>"]
 
