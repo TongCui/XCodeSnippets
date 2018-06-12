@@ -219,6 +219,7 @@ class SpecificContainer: Container<Int> {
 }
 ```
 
+<<<<<<< HEAD
 
 #### Apply
 Apply is a function that applies a function to a list of arguments.
@@ -289,3 +290,238 @@ func genericPartition<T>(list: [T],
 let doublesToPartition = [3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]
 print(genericPartition(list: doublesToPartition) { $0.truncatingRemainder(dividingBy: 2.0) == 0 }
 ```
+
+```
+let twoDimensionalArray = [[1, 3, 5], [2, 4, 6]]
+let oneDimensionalArray = twoDimensionalArray.flatMap { $0 }
+
+let oneDimensionalArray = twoDimensionalArray.joined().map { $0 }
+```
+
+In computer science, a Semigroup is an algebraic structure that has a set and a binary operation that takes two elements in the set and returns a Semigroup that has an associative operation.
+
+```
+protocol Semigroup {
+    func operation(_ element: Self) -> Self
+}
+```
+
+```
+extension Int: Semigroup {
+    func operation(_ element: Int) -> Int {
+        return self + element
+    }
+}
+```
+
+```
+infix operator <> { associativity left precedence 150 }
+
+func <> <S: Semigroup> (x: S, y: S) -> S {
+    return x.operation(y)
+}
+
+if numberA <> (numberB <> numberC) == (numberA <> numberB) <> numberC {
+    print("Operation is associative")
+}
+```
+
+#### Monoid
+In computer science, a Monoid is a set, a binary operation, and an element of the set with the following rules:
+
+- Associativity of binary operations
+- The element is the identity
+
+```
+protocol Monoid: Semigroup {
+    static func identity() -> Self
+}
+
+extension Int: Monoid {
+    static func identity() -> Int {
+        return 0
+    }
+}
+
+extension String: Monoid {
+    static func identity() -> String {
+        return ""
+    }
+}
+
+extension Array: Monoid {
+    static func identity() -> Array {
+        return []
+    }
+}
+```
+
+We can test it 
+```
+numberA <> Int.identity() // 3
+"A" <> String.identity() // A
+```
+
+```
+func mconcat <M: Monoid> ( _ elements: [M]) -> M {
+    return elements.reduce(M.identity(), combine: <>)
+}
+
+```
+
+#### Tree
+
+```
+enum Tree<Element: Comparable> {
+    case leaf(Element)
+    indirect case node(lhs: Tree, rhs: Tree)
+}
+
+
+static func contains( _ key: Element, tree: Tree<Element>) -> Bool {
+    switch tree {
+    case .leaf(let element):
+        return key == element
+    case node(let lhs, let rhs):
+        return contains(key, tree:lhs) || contains(key, tree:rhs)
+    }
+ }
+
+```
+
+#### BST Binary Search Tree
+
+```
+enum BinarySearchTree<Element: Comparable> {
+    case leaf
+    indirect case node(lhs: BinarySearchTree, element: Element,
+                       rhs: BinarySearchTree)
+}
+
+static func contains( _ item: Element, tree: BinarySearchTree<Element>)
+  -> Bool {
+    switch tree {
+    case .leaf:
+        return false
+    case .node(let lhs, let element, let rhs):
+        if item < element {
+            return contains(item, tree: lhs)
+        } else if item > element {
+            return contains(item, tree: rhs)
+        }
+        return true
+    }
+
+var size: Int {
+    switch self {
+    case .leaf:
+        return 0
+    case .node(let lhs, _, let rhs):
+        return 1 + lhs.size + rhs.size
+    }
+}
+
+var elements: [Element] {
+    switch self {
+    case .leaf:
+        return []
+    case .node(let lhs, let element, let rhs):
+        return lhs.elements + [element] + rhs.elements
+    }
+}
+
+static func empty() -> BinarySearchTree {
+    return .leaf
+}
+
+
+```
+
+
+#### List
+
+```
+enum LinkedList<Element: Equatable> {
+    case end
+    indirect case node(data: Element, next: LinkedList<Element>)
+}
+
+```
+
+```
+infix operator <| { associativity right precedence 100 }
+
+func <| <T>(lhs: T, rhs: LinkedList<T>) -> LinkedList<T> {
+    return .node(data: lhs, next: rhs)
+}
+
+let functionalLLWithCons = 3 <| 2 <| 1 <| .end
+
+```
+
+
+#### Stacks
+
+A stack is a collection that is based on the Last In First Out (LIFO) policy. 
+
+#### Lazy list
+
+```
+enum LazyList<Element: Equatable> {
+    case end
+    case node(data: Element, next: () -> LazyList<Element>)
+}
+
+```
+
+#### Weak versus strong immutability
+
+Sometimes, certain properties of an object can be immutable while the others may be mutable. These types of objects are called weakly immutable. Weak immutability means that we cannot change the immutable parts of the object state even though other parts of the object may be mutable. If all properties are immutable, then the object is immutable. If the whole object cannot be mutated after its creation, the object is called strongly immutable.
+
+#### SOLID
+
+- The single responsibility principle (SRP)
+- The open/closed principle (OCP)
+- The Liskov substitution principle (LSP)
+- The interface segregation principle (ISP)
+- The dependency inversion principle (DIP)
+
+
+Domain-driven Design (DDD) principles are proposed to solve OOP problems.
+
+#### FP
+
+- Explicit management of state is avoided through immutability
+- Explicit return values are favored over implicit side-effects
+- Powerful composition facilities promote reuse without compromising encapsulation
+- The culmination of these characteristics is a more declarative paradigm
+
+
+
+#### Lens
+
+```
+struct Lens<Whole, Part> {
+    let get: Whole -> Part
+    let set: (Part, Whole) -> Whole
+}
+```
+
+#### Lens composition
+
+```
+infix operator >>> { associativity right precedence 100 }
+
+func >>><A,B,C>(l: Lens<A,B>, r: Lens<B,C>) -> Lens<A,C> {
+    return Lens(get: { r.get(l.get($0)) },
+                set: { (c, a) in
+                    l.set(r.set(c,l.get(a)), a)
+    })
+}
+```
+
+
+
+
+
+>>>>>>> fc846a2e8f839e3a90eaa5b70a05c42e42475741

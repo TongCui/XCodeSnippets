@@ -1,0 +1,194 @@
+- NS_ENUM and typedef enum
+  1) concise
+  2) explicitly specify the type and size of your enumerations and options
+  3) new compilers
+
+- int vs nsinteger
+  1)  what kind of processor architecture your code might run on
+```
+#if __LP64__ || TARGET_OS_EMBEDDED || TARGET_OS_IPHONE || TARGET_OS_WIN32 || NS_BUILD_32_LIKE_64
+typedef long NSInteger;
+typedef unsigned long NSUInteger;
+#else
+typedef int NSInteger;
+typedef unsigned int NSUInteger;
+#endif
+```
+
+- id vs instancetype
+  1) When you use 'id', you get essentially no type checking at all. With instancetype, the compiler and IDE know what type of thing is being returned, and can check your code better and autocomplete better.
+
+
+- init unavailable 
+  1) - (instancetype) init __unavailable;
+
+- weak
+  
+- IBOutlet weak
+  1) Not neccessary, just to avoid memory retain cycle
+  2) 2015 WWDC change it
+
+- block using copy
+  1) MRC copy block -> heap
+
+- @property (nonatomic, copy) NSMutableArray *array;
+  1) Crash '-[__NSArray0 addObject:]: unrecognized selector sent to instance 0x60000000da60'
+  a = [b copy], it is a NSArray object
+
+- copy
+  1) NSCopying & NSMutableCopying
+  2) copyWithZone & mutableCopyWithZone
+
+- setter
+  1) arc
+  ```
+  - (void)setName: (NSString *)name {
+    _name = [name copy];
+  }
+  ```
+  2) mrc @property (nonatomic, retain) NSNumber *count;
+  ```
+  - (NSNumber *)count {
+      return _count;
+  }
+
+  - (void)setCount:(NSNumber *)count {
+      if (count != _count) {
+          id oldValue = _count;
+          _count = [count retain];
+          [oldValue release];
+      }
+  }
+  ```
+  3) mrc @property (nonatomic, copy) NSNumber *count;
+  ```
+  - (NSNumber *)count {
+      return _count;
+  }
+
+  - (void)setCount:(NSNumber *)count {
+      id oldValue = _count;
+      _count = [count copy]; // retains (+1)
+      [oldValue release];
+  }
+  ```
+  4) mrc @property (atomic, retain) NSNumber *count;
+  ```
+  - (NSNumber *)count {
+      NSNumber *count;
+      @synchronized(self) {
+          count = [_count retain]; // +1
+      }
+      return [count autorelease]; // delayed -1
+  }
+
+  - (void)setCount:(NSNumber *)count {
+      id oldValue;
+      @synchronized(self) {
+          oldValue = _count;
+          _count = [count retain];
+      }
+      [oldValue release];
+  }
+  ```
+
+- oc properties
+  1) all properties
+  class_copyPropertyList
+  ```
+  + (NSArray *)allProperties {
+    Class selfClass = [self class];
+    NSMutableArray * propertyNames = [NSMutableArray array];
+    while ([NSObject class] != selfClass) {
+        unsigned int propertyCount = 0;
+        objc_property_t * allProperties = class_copyPropertyList(selfClass, &propertyCount);
+        
+        for (unsigned int i = 0; i < propertyCount; ++i) {
+            objc_property_t property = allProperties[i];
+            const char * name = property_getName(property);
+            [propertyNames addObject:[NSString stringWithUTF8String:name]];
+        }
+        free(allProperties);
+        selfClass = class_getSuperclass(selfClass);
+    }
+    return propertyNames;
+  }
+  ```
+  2) all methods
+  class_copyMethodList
+
+
+- properties modifiers
+  nonatomic, atomic
+  readwrite, readonly
+  assign, strong, weak, unsafe-unretained, copy
+  getter, setter
+  nonnull, nullable, null_resettable
+
+- spin lock
+  1) 曾经有个经典的例子来比喻自旋锁：A，B两个人合租一套房子，共用一个厕所，那么这个厕所就是共享资源，且在任一时刻最多只能有一个人在使用。当厕所闲置时，谁来了都可以使用，当A使用时，就会关上厕所门，而B也要使用，但是急啊，就得在门外焦急地等待，急得团团转，是为“自旋”，这也是要求锁的持有时间尽量短的原因！
+
+- oc send message to nil
+  1) nothing
+  objc_msgSend(receiver, selector)
+  objc runtime 先根据object的isa指针找到class, 然后再方法列表以及父类的方法列表里面找message
+
+- method missing
+  1) + (BOOL)resolveInstanceMethod:(SEL)sel;
+  2） resolveClassMethod
+  3） forwardingTargetForSelector
+  ```
+  void dynamicMethodIMP(id self, SEL _cmd)
+  {
+      // implementation ....
+  }
+  + (BOOL) resolveInstanceMethod:(SEL)aSEL
+  {
+      if (aSEL == @selector(resolveThisMethodDynamically))
+      {
+            class_addMethod([self class], aSEL, (IMP) dynamicMethodIMP, "v@:");
+            return YES;
+      }
+      return [super resolveInstanceMethod:aSel];
+  }
+  ```
+- NSLog(@"%@", [self class]);
+  NSLog(@"%@", [super class]);
+
+- Runloop
+  Run loop，正如其名，loop表示某种循环，和run放在一起就表示一直在运行着的循环
+  ```
+  int main(int argc, char * argv[]) {
+   @autoreleasepool {
+       return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
+   }
+  }
+  ```
+  1)重点是UIApplicationMain()函数，这个方法会为main thread设置一个NSRunLoop对象，这就解释了：为什么我们的应用可以在无人操作的时候休息，需要让它干活的时候又能立马响应。
+  2)在使用手动的内存管理方式的项目中，会经常用到很多自动释放的对象，如果这些对象不能够被即时释放掉，会造成内存占用量急剧增大。Run loop就为我们做了这样的工作，每当一个运行循环结束的时候，它都会释放一次autorelease pool，同时pool中的所有自动释放类型变量都会被释放掉。
+
+- runloop mode
+  1)NSDefaultRunLoopMode（kCFRunLoopDefaultMode）：默认，空闲状态
+  UITrackingRunLoopMode：ScrollView滑动时
+  UIInitializationRunLoopMode：启动时
+  NSRunLoopCommonModes（kCFRunLoopCommonModes）：Mode集合
+
+- runloop
+  1) System event -> source -> button, shake
+  2）UIEvent Touch Gesture
+  3）Timer
+
+- CADisplayLink   
+  1) 是一个和屏幕刷新率一致的定时器（但实际实现原理更复杂，和 NSTimer 并不一样，其内部实际是操作了一个 Source
+
+- PerformSelecter
+  1)当调用 NSObject 的 performSelecter:afterDelay: 后，实际上其内部会创建一个 Timer 并添加到当前线程的 RunLoop 中。所以如果当前线程没有 RunLoop，则这个方法会失效。
+
+  2)当调用 performSelector:onThread: 时，实际上其会创建一个 Timer 加到对应的线程去，同样的，如果对应线程没有 RunLoop 该方法也会失效。
+
+- ARC
+  1) 编译时期 - 更底层的C
+  2）运行时
+
+- autoreleasepool
+  1) push pop

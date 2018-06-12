@@ -92,3 +92,9 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# My Script HTML files
+src/china-a-stock-index/htmls/number-*.html
+src/china-a-stock-index/numbers/number-*.json
+src/kid-words-learning/htmls/htmls-*.html
+src/kid-words-learning/words/words-*.json
