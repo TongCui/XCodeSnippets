@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'restclient'
-require 'nokogiri'
+require 'oga'
 require 'json'
 require 'date'
 
@@ -13,18 +13,19 @@ numbers_file_path = File.join(numbers_folder_path, "number-#{day}.json")
 html_file_path = File.join(htmls_folder_path, "number-#{day}.html")
 template_file_path = File.join(htmls_folder_path, "template.html")
 
-words = ["上证指数","创业板指数","长城汽车股票"]
+words = ["上证指数","创业板指数","工商银行","建设银行","海通证券","京东方A"]
 res = []
 content = ["<h1>#{day}<h1>"]
 
 words.each do |key|
 
   url = "http://www.baidu.com/s"
-  params = {params: {"wd" => key} }
+  params = {params: {"wd" => "#{key}股票"} }
 
   puts "> Loading content of url : #{url}"
 
-  page = Nokogiri::HTML(RestClient.get(url, params))
+  response = RestClient.get(url, params)
+  page = Oga.parse_html(response)
 
   number = page.css("div.op-stockdynamic-moretab-cur span.op-stockdynamic-moretab-cur-num").map{ |x| x.text.strip() }.first
   diff = page.css("div.op-stockdynamic-moretab-cur span.op-stockdynamic-moretab-cur-info").map{ |x| x.text.strip() }.first
